@@ -1,4 +1,4 @@
-package behavior;
+package git.behavior;
 
 
 import lejos.robotics.subsumption.Behavior;

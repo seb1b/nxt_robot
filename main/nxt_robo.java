@@ -1,4 +1,4 @@
-package main;
+package git.main;
 /*import behaviors.DriveForward;
 import behaviors.Endboss;
 
@@ -8,8 +8,8 @@ import behaviors.LabyrinthRight;
 import behaviors.SpinningEncounter;
 import behaviors.TestBehavior;
 */
-import behavior.FollowLine;
-import behavior.Bridge;
+import git.behavior.FollowLine;
+import git.behavior.Bridge;
 import motors.SensorMotor;
 import motors.LeftMotor;
 import motors.RightMotor;
