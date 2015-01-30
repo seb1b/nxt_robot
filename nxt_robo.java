@@ -1,9 +1,9 @@
 
-import behaviors.FollowLine;
-import behaviors.Bridge;
-import behaviors.Labyrinth;
-import behaviors.Startphase;
-import behaviors.ReadBarcode;
+import behavior.FollowLine;
+import behavior.Bridge;
+import behavior.Labyrinth;
+import behavior.StartPhase;
+import behavior.ReadBarcode;
 
 import lejos.nxt.ADSensorPort;
 import lejos.nxt.SensorPort;
@@ -24,7 +24,7 @@ public class nxt_robo {
 		motorH.start();*/
 //		
 		
-	  Behavior b0 = new Startphase();
+	  Behavior b0 = new StartPhase();
       //Behavior b1 = new FollowLine();
       //Behavior b2 = new Bridge();
       //Behavior b3 = new Labyrinth();
@@ -35,11 +35,9 @@ public class nxt_robo {
       Behavior b6 = new LabirinthGateBehavior();
       Behavior b11 = new Endboss();
       Behavior b12  = new SpinningEncounter();*/
-<<<<<<< HEAD:nxt_robo.java
-      Behavior [] bArray = {b4};
-=======
-      Behavior [] bArray = {b1,b0};
->>>>>>> fc51cb58f4f5a2667bae3d6b3dcba83f5a84f0a3:main/nxt_robo.java
+
+      Behavior [] bArray = {b0};
+
       Arbitrator arby = new Arbitrator(bArray);
       arby.start();
    }

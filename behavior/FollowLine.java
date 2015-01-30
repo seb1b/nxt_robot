@@ -1,4 +1,4 @@
-package behaviors;
+package behavior;
 
 
 import lejos.nxt.Button;

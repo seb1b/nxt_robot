@@ -1,4 +1,4 @@
-package behaviors;
+package behavior;
 
 import lejos.robotics.navigation.DifferentialPilot;
 import lejos.robotics.subsumption.Behavior;

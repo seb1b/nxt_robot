@@ -1,4 +1,4 @@
-package behaviors;
+package behavior;
 
 import utils.Values;
 import lejos.nxt.LightSensor;

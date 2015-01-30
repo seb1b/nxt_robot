@@ -1,4 +1,4 @@
-package behaviors;
+package behavior;
 
 
 import lejos.robotics.navigation.DifferentialPilot;
@@ -14,7 +14,7 @@ import lejos.nxt.TouchSensor;
 import lejos.nxt.UltrasonicSensor;
 
 
-public class Startphase implements Behavior {
+public class StartPhase implements Behavior {
 	private boolean suppressed = false;
 	
 	UltrasonicSensor sonicSensor;
@@ -28,7 +28,7 @@ public class Startphase implements Behavior {
 	TouchSensor touch_r;
 	
 	
-	public Startphase() {
+	public StartPhase() {
 		
 		System.out.println("START PHASE");
 		sonicSensor = new UltrasonicSensor(SensorPort.S2);
