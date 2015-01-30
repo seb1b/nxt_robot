@@ -1,20 +1,10 @@
-package git.main;
-/*import behaviors.DriveForward;
-import behaviors.Endboss;
 
-import behaviors.LabirinthGateBehavior;
-import behaviors.LabyrinthLeft;
-import behaviors.LabyrinthRight;
-import behaviors.SpinningEncounter;
-import behaviors.TestBehavior;
-*/
-import git.behavior.FollowLine;
-import git.behavior.Bridge;
-import git.behavior.Labyrinth;
-import git.behavior.StartPhase;
-import motors.SensorMotor;
-import motors.LeftMotor;
-import motors.RightMotor;
+import behaviors.FollowLine;
+import behaviors.Bridge;
+import behaviors.Labyrinth;
+import behaviors.Startphase;
+import behaviors.ReadBarcode;
+
 import lejos.nxt.ADSensorPort;
 import lejos.nxt.SensorPort;
 import lejos.robotics.subsumption.Arbitrator;
@@ -34,16 +24,18 @@ public class nxt_robo {
 		motorH.start();*/
 //		
 		
-	  Behavior b0 = new StartPhase();
-      Behavior b1 = new FollowLine();
-      Behavior b2 = new Bridge();
-      Behavior b3 = new Labyrinth();
+	  Behavior b0 = new Startphase();
+      //Behavior b1 = new FollowLine();
+      //Behavior b2 = new Bridge();
+      //Behavior b3 = new Labyrinth();
+      Behavior b4 = new ReadBarcode();
+      
      /* Behavior b3 = new FollowLine();
       Behavior b5 = new LabyrinthLeft();
       Behavior b6 = new LabirinthGateBehavior();
       Behavior b11 = new Endboss();
       Behavior b12  = new SpinningEncounter();*/
-      Behavior [] bArray = {b1};
+      Behavior [] bArray = {b4};
       Arbitrator arby = new Arbitrator(bArray);
       arby.start();
    }

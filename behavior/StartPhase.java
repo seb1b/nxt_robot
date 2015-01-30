@@ -1,4 +1,4 @@
-package git.behavior;
+package behaviors;
 
 
 import lejos.robotics.navigation.DifferentialPilot;
@@ -14,7 +14,7 @@ import lejos.nxt.TouchSensor;
 import lejos.nxt.UltrasonicSensor;
 
 
-public class StartPhase implements Behavior {
+public class Startphase implements Behavior {
 	private boolean suppressed = false;
 	
 	
@@ -28,7 +28,7 @@ public class StartPhase implements Behavior {
 	
 	
 	
-	public StartPhase() {
+	public Startphase() {
 		
 		touch = new TouchSensor(SensorPort.S3);
 		pilot = new DifferentialPilot(1.3f, 3.94f, Motor.A, Motor.C, true); 

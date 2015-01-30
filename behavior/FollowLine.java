@@ -1,4 +1,4 @@
-package git.behavior;
+package behaviors;
 
 
 import lejos.robotics.navigation.DifferentialPilot;

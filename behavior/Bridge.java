@@ -1,4 +1,4 @@
-package git.behavior;
+package behaviors;
 
 
 import lejos.robotics.subsumption.Behavior;
@@ -61,19 +61,9 @@ public class Bridge implements Behavior {
 		}
 			
 			
-			
-				
-				
-			
-			
 	}
 
 
-		
-
-
-
-	
 
 	public void suppress() {
 		suppressed = true;
