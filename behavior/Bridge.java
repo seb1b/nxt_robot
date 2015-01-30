@@ -1,73 +1,79 @@
-package behaviors;
-
-
-import lejos.robotics.subsumption.Behavior;
-import lejos.nxt.comm.RConsole;
 import lejos.util.*;
-import lejos.nxt.I2CPort;
 import lejos.nxt.LightSensor;
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
-import lejos.nxt.Sound;
-import lejos.nxt.TouchSensor;
 import lejos.nxt.UltrasonicSensor;
-
+import lejos.robotics.subsumption.Behavior;
 
 public class Bridge implements Behavior {
-	private boolean suppressed = false;
+	LightSensor ls;
+	UltrasonicSensor us;
+	long zstVorher;
+	long zstNachher;
+	boolean rampe=false;
 	
-	private static int DARK = 40;
-	LightSensor lightSensor;
-	SensorPort lightPort;
-	UltrasonicSensor sonicSensor;
+	int speedFactor = 2; //2: Maximale Geschwindigkeit, 1: Halbe Geschwindigkeit
 	
+	private int treshold = 10;
 	
-	
-	
-	public Bridge() {
-		
-		System.out.println("inizialiese light");
-		lightPort = SensorPort.S4;
-		
-		
-
-		lightSensor = new LightSensor(lightPort);
-		sonicSensor = new UltrasonicSensor(SensorPort.S1);
-		
-
+	public Bridge(){
+		//ls = new LightSensor(SensorPort.S4);
+		us = new UltrasonicSensor(SensorPort.S2);
 	}
+	
 
 	public boolean takeControl() {
-
-		
 		return true;
 	}
 
 	public void action() {
 		
-		while(!suppressed){
-		//	RConsole.open();
-		int distance = sonicSensor.getDistance();
-		int light_value = lightSensor.getLightValue();
-		
-		
-		
-		//RConsole.println("Distance"+ distance);
-		//RConsole.println("Light"+ light_value);
-		
-		System.out.println("Distance"+ distance);
-		System.out.println("Light"+ light_value);
-		//RConsole.close();
+		Motor.B.rotate(-90);
+		leftCurve(1000/speedFactor);
+		while(true){			
+			while(us.getDistance() < treshold){
+				moveForward();
+			} while(us.getDistance() > treshold){
+				if(treshold>30){ //Rampe wurde hochgefahren. Nötig, um Spalt zu überfahren
+					treshold = 30;
+				}
+				moveRight();
+			}
 		}
-			
-			
 	}
+	
+	public void leftCurve(long delay){
+		Motor.C.setSpeed(400*speedFactor);
+		Motor.C.forward();
+		Motor.A.setSpeed(100*speedFactor);
+		Motor.A.forward();
+		Delay.msDelay(delay);
+		
+	}
+	
 
-
+	
+	
+	public void moveForward(){
+		Motor.C.setSpeed(500);
+		Motor.C.forward();
+		Motor.A.setSpeed(300);
+		Motor.A.forward();
+	}
+	
+	public void moveRight(){
+		Motor.C.backward();
+		//Motor.A.setSpeed(300);
+		Motor.A.forward();
+	}
+	
+		
+	
 
 	public void suppress() {
-		suppressed = true;
+
 	}
 
-
 }
+
+
