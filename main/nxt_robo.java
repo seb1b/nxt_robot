@@ -43,7 +43,7 @@ public class nxt_robo {
       Behavior b6 = new LabirinthGateBehavior();
       Behavior b11 = new Endboss();
       Behavior b12  = new SpinningEncounter();*/
-      Behavior [] bArray = {b1};
+      Behavior [] bArray = {b1,b0};
       Arbitrator arby = new Arbitrator(bArray);
       arby.start();
    }

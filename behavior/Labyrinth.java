@@ -32,7 +32,7 @@ public class Labyrinth implements Behavior {
 		
 		System.out.println("inizialiese light");
 		sonicSensor = new UltrasonicSensor(SensorPort.S2);
-		touch_l = new TouchSensor(SensorPort.S3);
+		touch_l = new TouchSensor(SensorPort.S1);
 		touch_r = new TouchSensor(SensorPort.S4);
 		pilot = new DifferentialPilot(1.3f, 3.94f, Motor.A, Motor.C, false); 
 
@@ -71,8 +71,10 @@ public class Labyrinth implements Behavior {
 			
 			if(contact()){
 				//timeStart=System.currentTimeMillis();
-				
+				//System.out.println("too far"+ sonicSensor.getDistance());
+				//pilot.quickStop();
 				pilot.backward();
+				Delay.msDelay(500);
 				pilot.rotate(-180);
 				System.out.println("touch");
 			}

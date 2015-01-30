@@ -17,21 +17,25 @@ import lejos.nxt.UltrasonicSensor;
 public class StartPhase implements Behavior {
 	private boolean suppressed = false;
 	
-	
-	TouchSensor touch;
-	
-	private static boolean LINE = true;
-	private static boolean LEFT_CURVE = false;
-	private static boolean RIGHT_CURVE = false;
-	int counter = 0;
+	UltrasonicSensor sonicSensor;
 	DifferentialPilot pilot;
-	
+	private static int LOWER_BOARDER = 10;
+	private static int UPPER_BOARDER = 18;
+	private static int NO_WALL = 70;
+	private static int HARD_STEER = 90;
+	private static int SOFT_STEER = 50;
+	TouchSensor touch_l;
+	TouchSensor touch_r;
 	
 	
 	public StartPhase() {
 		
-		touch = new TouchSensor(SensorPort.S3);
-		pilot = new DifferentialPilot(1.3f, 3.94f, Motor.A, Motor.C, true); 
+		System.out.println("START PHASE");
+		sonicSensor = new UltrasonicSensor(SensorPort.S2);
+		touch_l = new TouchSensor(SensorPort.S1);
+		touch_r = new TouchSensor(SensorPort.S4);
+		pilot = new DifferentialPilot(1.3f, 3.94f, Motor.A, Motor.C, false); 
+		pilot.setTravelSpeed(100);
 
 	}
 
@@ -42,63 +46,58 @@ public class StartPhase implements Behavior {
 	}
 
 	public void action() {
-		counter = 0;
-		while(!suppressed){
-			pilot.setTravelSpeed(100);
-			
-		while(LINE){
-			pilot.backward();
-			//is_touching = touch.isPressed();
-			System.out.println("not pressed");
-			if(touch.isPressed()&& counter <2){
-				System.out.println("is touching");
-				LEFT_CURVE = true;
-				LINE = false;
-				counter++;
-			}
-			if(touch.isPressed() && counter > 2){
-				LINE = false;
-				RIGHT_CURVE = true;
-			}
-			
-			
-		}
 		
-		while(LEFT_CURVE){
-			System.out.println("left");
-			//pilot.forward();
-			//Delay.msDelay(100);
-			pilot.rotate(-120);
-			LEFT_CURVE = false;
-			LINE = true;
+		//long timeStart=System.currentTimeMillis();
+	//	System.out.println("ROTATE"+pilot.getRotateSpeed());
+	//	Delay.msDelay(2000);
+		while(!suppressed){
 			
-		}
+			while(!contact() && LOWER_BOARDER < sonicSensor.getDistance() && UPPER_BOARDER > sonicSensor.getDistance()){
+				pilot.forward();
+				System.out.println("good Distance"+ sonicSensor.getDistance());
+				
+				
+			}
+			while(!contact() && LOWER_BOARDER >+sonicSensor.getDistance()){
+				pilot.steer(-SOFT_STEER);
+				System.out.println("too close"+ sonicSensor.getDistance());
+			}
+			while(!contact() && UPPER_BOARDER <= sonicSensor.getDistance()&&NO_WALL >= sonicSensor.getDistance()){
+				pilot.steer(SOFT_STEER);
+				System.out.println("too far"+ sonicSensor.getDistance());
+			}
 			
+			while(!contact() && NO_WALL <= sonicSensor.getDistance()){
+				pilot.steer(HARD_STEER);
+				System.out.println("no wall"+ sonicSensor.getDistance());
+			}
 			
-		}
-			
-		while(RIGHT_CURVE){
-			System.out.println("right");
-			//pilot.forward();
-			//Delay.msDelay(100);
-			pilot.rotate(120);
-			RIGHT_CURVE = false;
-			LINE = true;
-			
+			if(contact()){
+				//timeStart=System.currentTimeMillis();
+				//System.out.println("too far"+ sonicSensor.getDistance());
+				//pilot.quickStop();
+				pilot.backward();
+				Delay.msDelay(500);
+				pilot.rotate(-180);
+				System.out.println("touch");
+			}
 			
 		}
 			
 			
 			
 				
-		
+				
 			
 			
 	}
 
 
 		
-
+	boolean contact(){
+		return (touch_l.isPressed()||touch_r.isPressed()) ;
+		
+	}
 
 
 	
