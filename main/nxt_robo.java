@@ -10,6 +10,8 @@ import behaviors.TestBehavior;
 */
 import git.behavior.FollowLine;
 import git.behavior.Bridge;
+import git.behavior.Labyrinth;
+import git.behavior.StartPhase;
 import motors.SensorMotor;
 import motors.LeftMotor;
 import motors.RightMotor;
@@ -32,9 +34,10 @@ public class nxt_robo {
 		motorH.start();*/
 //		
 		
-	   
+	  Behavior b0 = new StartPhase();
       Behavior b1 = new FollowLine();
       Behavior b2 = new Bridge();
+      Behavior b3 = new Labyrinth();
      /* Behavior b3 = new FollowLine();
       Behavior b5 = new LabyrinthLeft();
       Behavior b6 = new LabirinthGateBehavior();
