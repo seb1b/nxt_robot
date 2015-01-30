@@ -1,120 +1,129 @@
 package behaviors;
 
 
-import lejos.robotics.navigation.DifferentialPilot;
-import lejos.robotics.subsumption.Behavior;
-import lejos.util.*;
-import lejos.nxt.I2CPort;
+import lejos.nxt.Button;
+import lejos.nxt.ColorSensor;
 import lejos.nxt.LightSensor;
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
-import lejos.nxt.Sound;
-import lejos.nxt.TouchSensor;
-import lejos.nxt.UltrasonicSensor;
+import lejos.nxt.comm.Bluetooth;
+import lejos.nxt.comm.NXTConnection;
+import lejos.robotics.navigation.DifferentialPilot;
+import lejos.robotics.subsumption.Behavior;
+import lejos.util.Delay;
+import lejos.util.NXTDataLogger;
+import lejos.util.PIDController;
+
+
+
 
 
 public class FollowLine implements Behavior {
 	private boolean suppressed = false;
-	
-	private static int DARK = 40;
-	private boolean ON_LINE = true;
-	private boolean SEARCH_LINE_LEFT = false;
-	private boolean SEARCH_LINE_RIGHT = false;
-	private boolean SEARCH_RADIUS_LEFT = false;
-	private boolean SEARCH_RADIUS_RIGHT = false;
-	private int turning_limit = 0;
-	LightSensor lightSensor;
-	SensorPort lightPort;
-	DifferentialPilot pilot;
+	private DifferentialPilot pilot;
+	private PIDController pid;
+	private LightSensor detector;
+	int start_run = 0;
 	
 	public FollowLine() {
-		
-		System.out.println("inizialiese light");
-		lightPort = SensorPort.S1;
-
-		lightSensor = new LightSensor(lightPort);
-		pilot = new DifferentialPilot(1.3f, 3.94f, Motor.A, Motor.C, false); 
-		
-
-	}
-
-	public boolean takeControl() {
-
-		
-		return true;
-	}
-
-	public void action() {
-		
-		//long timeStart=System.currentTimeMillis();
-		pilot.setTravelSpeed(5);
-		int counter = 0;
-		// cm per second
-		while(!suppressed){
-			System.out.println("ON LINE: " + lightSensor.getLightValue());
-			
-			/*while(DARK < lightSensor.getLightValue()){
-				
-				pilot.forward();
-				 
-				System.out.println("ON LINE: " + lightSensor.getLightValue());
-				turning_limit = 0;
-
-			}
-			counter = 0;
-			turning_limit++;
-			
-			while(turning_limit > counter && DARK > lightSensor.getLightValue()){				
-				System.out.println("left " + lightSensor.getLightValue());
-				pilot.rotateLeft();		
-				counter++;
-				
-			}
-			counter = 0;
-			turning_limit++;
-			while(turning_limit > counter && DARK > lightSensor.getLightValue()){
-				System.out.println("right " + lightSensor.getLightValue());
-				pilot.rotateRight();	
-				counter++;
-			}
-			
-			
-				*/
-				
-			
-			
-		}
-
-
-		
-
-
+		/*SLOW BUT WORKING BACKUP VALUES
+		 * 
+		 *  pid = new PIDController(45, 5);
+	      pid.setPIDParam(PIDController.PID_KP, 10.0f);
+	      pid.setPIDParam(PIDController.PID_KI, 0.01f);
+	      pid.setPIDParam(PIDController.PID_KD, 20f);
+	      pid.setPIDParam(PIDController.PID_LIMITHIGH, 180);
+	      pid.setPIDParam(PIDController.PID_LIMITLOW, -180);
+	      
+	      pilot = new DifferentialPilot(1.3f, 3.94f, Motor.A, Motor.C, false); 
+	      pilot.setTravelSpeed(3);
+	      pilot.setRotateSpeed(70);
+		 * 
+		 */
+		System.out.println("FOLLOW LINEE");
+		  
+	      pid = new PIDController(45, 5);
+	      pid.setPIDParam(PIDController.PID_KP, 10.0f);
+	      pid.setPIDParam(PIDController.PID_KI, 0.01f);
+	      pid.setPIDParam(PIDController.PID_KD, 20f);
+	      pid.setPIDParam(PIDController.PID_LIMITHIGH, 180);
+	      pid.setPIDParam(PIDController.PID_LIMITLOW, -180);
+	      
+	      pilot = new DifferentialPilot(1.3f, 3.94f, Motor.A, Motor.C, false); 
+	      pilot.setTravelSpeed(3.5);
+	      pilot.setRotateSpeed(75);
+	      
+	      detector = new LightSensor(SensorPort.S3);
 
 	}
 
-	public void suppress() {
-		suppressed = true;
-	}
 	
-	private void turnleft(){
-		Motor.A.backward();
-		Motor.C.forward();
-		
-	}
-	
-	private void turnright(){
-		Motor.A.forward();
-		Motor.C.backward();
-	}
-	
-	private boolean isLine(){
-		boolean line_available = false;
-		if(lightSensor.getLightValue() > DARK){
-			
-			line_available = true;
-		}
-		return line_available;
-	}
+      
+    public boolean takeControl() {
 
+  		
+  		return true;
+  	}
+
+  	public void action() {
+  		
+  		 
+        while (!suppressed) {
+        	if(start_run == 0){
+     			 pilot.setTravelSpeed(100);
+     			 pilot.forward();
+     			Delay.msDelay(1000);
+     			pilot.setTravelSpeed(3.5);
+     			pilot.steer(30);
+     			Delay.msDelay(500);
+     			start_run = 1;
+     			 
+     		 }
+                          // range is from 200 to 500
+           int sensor = detector.getLightValue();         
+           System.out.println("light" + sensor);
+           int speedDelta = pid.doPID(sensor);
+          // System.out.println("steering" + speedDelta);
+        
+           pilot.steer(speedDelta);
+           
+           
+        }
+  			
+  		}
+
+
+  		
+
+
+
+  	
+
+  	public void suppress() {
+  		suppressed = true;
+  	}
+  	
 
 }
+ 
+
+    /*  Motor.A.setSpeed(SPEED);
+      Motor.C.setSpeed(SPEED);
+      Motor.A.forward();
+      Motor.C.forward();
+      final LightSensor detector = new LightSensor(SensorPort.S3);
+      while (!Button.ESCAPE.isDown()) {
+                        // range is from 200 to 500
+         int sensor = detector.getLightValue();         
+        // System.out.println(sensor);
+         int speedDelta = pid.doPID(sensor);
+          System.out.println(speedDelta);
+         //speedDelta = speedDelta;
+         System.out.println("A steering" + (SPEED-speedDelta));
+         System.out.println("C steering" + (SPEED+speedDelta));
+         Motor.A.setSpeed(SPEED-speedDelta);
+                        Motor.C.setSpeed(SPEED+speedDelta);
+         
+         
+      }*/
+
