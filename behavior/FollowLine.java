@@ -1,6 +1,7 @@
-package behaviors;
+package behavior;
 
 
+import utils.Values;
 import lejos.nxt.Button;
 import lejos.nxt.ColorSensor;
 import lejos.nxt.LightSensor;
@@ -40,7 +41,7 @@ public class FollowLine implements Behavior {
 	      pilot.setRotateSpeed(70);
 		 * 
 		 */
-		System.out.println("FOLLOW LINEE");
+		
 		  
 	      pid = new PIDController(45, 5);
 	      pid.setPIDParam(PIDController.PID_KP, 10.0f);
@@ -54,19 +55,21 @@ public class FollowLine implements Behavior {
 	      pilot.setRotateSpeed(75);
 	      
 	      detector = new LightSensor(SensorPort.S3);
-
 	}
 
 	
       
     public boolean takeControl() {
 
-  		
-  		return true;
+    	if(Values.Instance().getSzenario() == 1){
+			return true;
+		}
+		return false;
   	}
 
   	public void action() {
   		
+  		System.out.println("S: Follow Line");
   		 
         while (!suppressed) {
         	if(start_run == 0){

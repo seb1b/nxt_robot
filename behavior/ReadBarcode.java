@@ -1,4 +1,4 @@
-package behaviors;
+package behavior;
 
 import utils.Values;
 import lejos.nxt.LightSensor;
@@ -22,12 +22,13 @@ public class ReadBarcode implements Behavior {
 
 		if (values.isCallCodeReader()) {
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	public void action() {
+		
+		System.out.println("S: Read Barcode");
 
 		values.setCallCodeReader(false);
 		

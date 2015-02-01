@@ -16,7 +16,7 @@ public class Values {
 		
 		this.scenario = 0;
 		this.resetStarted = false;
-		this.callCodeReader = true;
+		this.callCodeReader = false;
 	}
 
 	
@@ -56,6 +56,7 @@ public class Values {
 		this.scenario = s;
 	}
 	
+	
 	public void incScenario() {
 		this.scenario++;
 	}
@@ -66,5 +67,9 @@ public class Values {
 
 	public void setResetStarted(boolean resetStarted) {
 		this.resetStarted = resetStarted;
+	}
+	
+	public boolean justStarted(long time) {
+		return (System.currentTimeMillis() - time) < 2000;
 	}
 }

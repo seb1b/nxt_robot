@@ -1,3 +1,6 @@
+package behavior;
+
+import utils.Values;
 import lejos.util.*;
 import lejos.nxt.LightSensor;
 import lejos.nxt.Motor;
@@ -23,10 +26,14 @@ public class PlankBridge implements Behavior {
 	
 
 	public boolean takeControl() {
-		return true;
+		if(Values.Instance().getSzenario() == 7){
+			return true;
+		}
+		return false;
 	}
-
 	public void action() {
+		
+		System.out.println("S: PlankBridge");
 		
 		Motor.B.rotate(-90);
 		leftCurve(1000/speedFactor);

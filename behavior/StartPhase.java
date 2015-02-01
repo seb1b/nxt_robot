@@ -1,6 +1,7 @@
-package behaviors;
+package behavior;
 
 
+import utils.Values;
 import lejos.robotics.navigation.DifferentialPilot;
 import lejos.robotics.subsumption.Behavior;
 import lejos.nxt.comm.RConsole;
@@ -14,7 +15,7 @@ import lejos.nxt.TouchSensor;
 import lejos.nxt.UltrasonicSensor;
 
 
-public class Startphase implements Behavior {
+public class StartPhase implements Behavior {
 	private boolean suppressed = false;
 	
 	UltrasonicSensor sonicSensor;
@@ -28,9 +29,8 @@ public class Startphase implements Behavior {
 	TouchSensor touch_r;
 	
 	
-	public Startphase() {
-		
-		System.out.println("START PHASE");
+	public StartPhase() {
+
 		sonicSensor = new UltrasonicSensor(SensorPort.S2);
 		touch_l = new TouchSensor(SensorPort.S1);
 		touch_r = new TouchSensor(SensorPort.S4);
@@ -40,12 +40,14 @@ public class Startphase implements Behavior {
 	}
 
 	public boolean takeControl() {
-
-		
-		return true;
+		if(Values.Instance().getSzenario() == 0){
+			return true;
+		}
+		return false;
 	}
 
 	public void action() {
+		System.out.println("S: Startphase");
 		
 		//long timeStart=System.currentTimeMillis();
 	//	System.out.println("ROTATE"+pilot.getRotateSpeed());
@@ -73,13 +75,14 @@ public class Startphase implements Behavior {
 			}
 			
 			if(contact()){
+				System.out.println("touch");
 				//timeStart=System.currentTimeMillis();
 				//System.out.println("too far"+ sonicSensor.getDistance());
 				//pilot.quickStop();
 				pilot.backward();
 				Delay.msDelay(500);
 				pilot.rotate(-180);
-				System.out.println("touch");
+				
 			}
 			
 		}

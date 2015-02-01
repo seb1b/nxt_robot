@@ -1,3 +1,6 @@
+package behavior;
+
+import utils.Values;
 import lejos.util.*;
 import lejos.nxt.LightSensor;
 import lejos.nxt.Motor;
@@ -24,10 +27,15 @@ public class Bridge implements Behavior {
 	
 
 	public boolean takeControl() {
-		return true;
+		if(Values.Instance().getSzenario() == 4){
+			return true;
+		}
+		return false;
 	}
 
 	public void action() {
+		
+		System.out.println("S: Bridge");
 		
 		Motor.B.rotate(-90);
 		leftCurve(1000/speedFactor);
