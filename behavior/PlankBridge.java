@@ -26,7 +26,7 @@ public class PlankBridge implements Behavior {
 	
 
 	public boolean takeControl() {
-		if(Values.Instance().getSzenario() == 7){
+		if(Values.Instance().getScenario() == 7){
 			return true;
 		}
 		return false;
