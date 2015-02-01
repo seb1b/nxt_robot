@@ -42,10 +42,9 @@ public class FollowLine implements Behavior {
 		 * 
 		 */
 		
-<<<<<<< HEAD
+
 		System.out.println("FOLLOW LINEE");
-=======
->>>>>>> 73a488f07bda48277b933fe94924f49de7103357
+
 		  
 	      pid = new PIDController(45, 5);
 	      pid.setPIDParam(PIDController.PID_KP, 10.0f);
@@ -64,7 +63,7 @@ public class FollowLine implements Behavior {
 	
       
     public boolean takeControl() {
-<<<<<<< HEAD
+
     	/*System.out.println("checking foloow"+value.getScenario());
   		if(value.getScenario() == 1){
   			return true;
@@ -72,13 +71,8 @@ public class FollowLine implements Behavior {
   			return false;
   		}*/
   		return true;
-=======
 
-    	if(Values.Instance().getSzenario() == 1){
-			return true;
-		}
-		return false;
->>>>>>> 73a488f07bda48277b933fe94924f49de7103357
+
   	}
 
   	public void action() {

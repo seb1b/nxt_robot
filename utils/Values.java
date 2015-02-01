@@ -18,7 +18,7 @@ public class Values {
 		this.scenario = 0;
 		this.resetStarted = false;
 		this.callCodeReader = false;
-<<<<<<< HEAD
+
 	}
 	
 	public static Values Instance() {
@@ -29,8 +29,7 @@ public class Values {
 			instance = new Values();
 			return instance;
 		}
-=======
->>>>>>> 73a488f07bda48277b933fe94924f49de7103357
+
 	}
 
 	

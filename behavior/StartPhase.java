@@ -42,19 +42,13 @@ public class StartPhase implements Behavior {
 	}
 
 	public boolean takeControl() {
-<<<<<<< HEAD
 
 		if(value.getScenario() == 0){
 			return true;
 		}else {
 			return false;
 		}
-=======
-		if(Values.Instance().getSzenario() == 0){
-			return true;
-		}
-		return false;
->>>>>>> 73a488f07bda48277b933fe94924f49de7103357
+
 	}
 
 	public void action() {
