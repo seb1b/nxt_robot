@@ -23,12 +23,13 @@ public class ReadBarcode implements Behavior {
 		if (values.isCallCodeReader()) {
 			System.out.println("barrcode");
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	public void action() {
+		
+		System.out.println("S: Read Barcode");
 
 		values.setCallCodeReader(false);
 		

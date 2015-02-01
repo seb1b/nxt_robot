@@ -1,5 +1,6 @@
 package behavior;
 
+import utils.Values;
 import lejos.robotics.navigation.DifferentialPilot;
 import lejos.robotics.subsumption.Behavior;
 import lejos.nxt.comm.RConsole;
@@ -28,8 +29,6 @@ public class Labyrinth implements Behavior {
 	
 	
 	public Labyrinth() {
-		
-		System.out.println("inizialiese light");
 		sonicSensor = new UltrasonicSensor(SensorPort.S2);
 		touch_l = new TouchSensor(SensorPort.S1);
 		touch_r = new TouchSensor(SensorPort.S4);
@@ -39,11 +38,15 @@ public class Labyrinth implements Behavior {
 
 	public boolean takeControl() {
 
-		
-		return true;
+		if(Values.Instance().getSzenario() == 5){
+			return true;
+		}
+		return false;
 	}
 
 	public void action() {
+		System.out.println("S: Labyrinth");
+		
 		pilot.setTravelSpeed(7);
 		//long timeStart=System.currentTimeMillis();
 		while(!suppressed){
@@ -79,12 +82,6 @@ public class Labyrinth implements Behavior {
 			}
 			
 		}
-			
-			
-			
-				
-				
-			
 			
 	}
 

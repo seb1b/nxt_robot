@@ -8,48 +8,53 @@ import lejos.nxt.SensorPort;
 import lejos.nxt.UltrasonicSensor;
 import lejos.robotics.subsumption.Behavior;
 
-public class Bridge implements Behavior {
-	
+public class PlankBridge implements Behavior {
 	LightSensor ls;
 	UltrasonicSensor us;
 	long zstVorher;
 	long zstNachher;
-	boolean rampe=false;
+	boolean endOfBridge=false;
 	
 	int speedFactor = 2; //2: Maximale Geschwindigkeit, 1: Halbe Geschwindigkeit
 	
 	private int treshold = 10;
 	
-	public Bridge(){
+	public PlankBridge(){
 		//ls = new LightSensor(SensorPort.S4);
 		us = new UltrasonicSensor(SensorPort.S2);
 	}
 	
 
 	public boolean takeControl() {
-		if(Values.Instance().getSzenario() == 4){
+		if(Values.Instance().getSzenario() == 7){
 			return true;
 		}
 		return false;
 	}
-
 	public void action() {
 		
-		System.out.println("S: Bridge");
+		System.out.println("S: PlankBridge");
 		
 		Motor.B.rotate(-90);
 		leftCurve(1000/speedFactor);
-		while(true){			
+		int counterAbgrund = 0;
+		//int counterDrehung = 0;
+		//int timesAdjusted = 0;
+		while(true){	
 			while(us.getDistance() < treshold){
+				counterAbgrund = 0;
 				moveForward();
-			} while(us.getDistance() > treshold){
-				if(treshold>30){ //Rampe wurde hochgefahren. Nötig, um Spalt zu überfahren
-					treshold = 30;
-				}
-				moveRight();
+			} while(us.getDistance() > treshold && counterAbgrund <= 10){ //TODO rausfinden: ist Wert von 10 gut? 
+				counterAbgrund ++;
 			}
+			while(us.getDistance() > treshold && counterAbgrund >10 )
+					//&& 
+					//(counterDrehung < (2*treshold)) && timesAdjusted < 4){ //TODO Wert rausfinden f�r timesAdjusted
+																		//und CounterDrehung
+				//counterDrehung ++;
+				moveRight();
+			} //timesAdjusted ++;
 		}
-	}
 	
 	public void leftCurve(long delay){
 		Motor.C.setSpeed(400*speedFactor);

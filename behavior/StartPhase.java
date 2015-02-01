@@ -31,8 +31,7 @@ public class StartPhase implements Behavior {
 	private Values value = Values.Instance();
 	
 	public StartPhase() {
-		
-		System.out.println("START PHASE");
+
 		sonicSensor = new UltrasonicSensor(SensorPort.S2);
 		lightSensor = new LightSensor(SensorPort.S3);
 		touch_l = new TouchSensor(SensorPort.S1);
@@ -43,15 +42,23 @@ public class StartPhase implements Behavior {
 	}
 
 	public boolean takeControl() {
+<<<<<<< HEAD
 
 		if(value.getScenario() == 0){
 			return true;
 		}else {
 			return false;
 		}
+=======
+		if(Values.Instance().getSzenario() == 0){
+			return true;
+		}
+		return false;
+>>>>>>> 73a488f07bda48277b933fe94924f49de7103357
 	}
 
 	public void action() {
+		System.out.println("S: Startphase");
 		
 		//long timeStart=System.currentTimeMillis();
 	//	System.out.println("ROTATE"+pilot.getRotateSpeed());
@@ -81,13 +88,14 @@ public class StartPhase implements Behavior {
 			}
 			
 			if(contact()){
+				System.out.println("touch");
 				//timeStart=System.currentTimeMillis();
 				//System.out.println("too far"+ sonicSensor.getDistance());
 				//pilot.quickStop();
 				pilot.backward();
 				Delay.msDelay(500);
 				pilot.rotate(-180);
-				System.out.println("touch");
+				
 			}
 			
 			if(lightSensor.getLightValue() > 50){
