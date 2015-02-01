@@ -21,6 +21,7 @@ public class ReadBarcode implements Behavior {
 	public boolean takeControl() {
 
 		if (values.isCallCodeReader()) {
+			System.out.println("barrcode");
 			return true;
 		} else {
 			return false;
@@ -53,6 +54,7 @@ public class ReadBarcode implements Behavior {
 			//values.setScenario(nLines);
 			values.incScenario();
 		}
+		
 	}
 
 	public void suppress() {

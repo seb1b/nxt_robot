@@ -11,12 +11,23 @@ public class Values {
 	private boolean suppressed;
 	
 	private boolean resetStarted;
+	private boolean is_startphase_running = false;
 
 	private Values() {
 		
 		this.scenario = 0;
 		this.resetStarted = false;
-		this.callCodeReader = true;
+		this.callCodeReader = false;
+	}
+	
+	public static Values Instance() {
+		if (instance != null)
+			return instance;
+
+		else {
+			instance = new Values();
+			return instance;
+		}
 	}
 
 	
@@ -37,18 +48,18 @@ public class Values {
 		this.callCodeReader = callCodeReader;
 	}
 
-	public static Values Instance() {
-		if (instance != null)
-			return instance;
+	public boolean isStartphaseRunning() {
+		return is_startphase_running;
+	}
+	
+	public void setStartphaseRunning(boolean t) {
+		is_startphase_running = t;
+			
 
-		else {
-			instance = new Values();
-			return instance;
-		}
 	}
 
 
-	public int getSzenario() {
+	public int getScenario() {
 		return scenario;
 	}
 

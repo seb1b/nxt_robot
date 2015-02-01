@@ -1,6 +1,7 @@
 package behavior;
 
 
+import utils.Values;
 import lejos.robotics.navigation.DifferentialPilot;
 import lejos.robotics.subsumption.Behavior;
 import lejos.nxt.comm.RConsole;
@@ -20,29 +21,34 @@ public class StartPhase implements Behavior {
 	UltrasonicSensor sonicSensor;
 	DifferentialPilot pilot;
 	private static int LOWER_BOARDER = 10;
-	private static int UPPER_BOARDER = 18;
-	private static int NO_WALL = 70;
-	private static int HARD_STEER = 90;
-	private static int SOFT_STEER = 50;
+	private static int UPPER_BOARDER = 14;
+	private static int NO_WALL = 60;
+	private static int HARD_STEER = 75;
+	private static int SOFT_STEER = 40;
 	TouchSensor touch_l;
 	TouchSensor touch_r;
-	
+	LightSensor lightSensor;
+	private Values value = Values.Instance();
 	
 	public StartPhase() {
 		
 		System.out.println("START PHASE");
 		sonicSensor = new UltrasonicSensor(SensorPort.S2);
+		lightSensor = new LightSensor(SensorPort.S3);
 		touch_l = new TouchSensor(SensorPort.S1);
 		touch_r = new TouchSensor(SensorPort.S4);
 		pilot = new DifferentialPilot(1.3f, 3.94f, Motor.A, Motor.C, false); 
-		pilot.setTravelSpeed(100);
+		pilot.setTravelSpeed(10);
 
 	}
 
 	public boolean takeControl() {
 
-		
-		return true;
+		if(value.getScenario() == 0){
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 	public void action() {
@@ -50,6 +56,8 @@ public class StartPhase implements Behavior {
 		//long timeStart=System.currentTimeMillis();
 	//	System.out.println("ROTATE"+pilot.getRotateSpeed());
 	//	Delay.msDelay(2000);
+		if(!value.isStartphaseRunning()){
+			value.setStartphaseRunning(true);
 		while(!suppressed){
 			
 			while(!contact() && LOWER_BOARDER < sonicSensor.getDistance() && UPPER_BOARDER > sonicSensor.getDistance()){
@@ -82,6 +90,14 @@ public class StartPhase implements Behavior {
 				System.out.println("touch");
 			}
 			
+			if(lightSensor.getLightValue() > 50){
+				System.out.println("gotlight");
+				pilot.stop();
+				Values.Instance().setCallCodeReader(true);
+				suppressed = true;
+			}
+			
+		}
 		}
 			
 			
@@ -103,6 +119,7 @@ public class StartPhase implements Behavior {
 	
 
 	public void suppress() {
+		System.out.println("suppress start phase");
 		suppressed = true;
 	}
 

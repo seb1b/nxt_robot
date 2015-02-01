@@ -25,7 +25,7 @@ public class nxt_robo {
 //		
 		
 	  Behavior b0 = new StartPhase();
-      //Behavior b1 = new FollowLine();
+      Behavior b1 = new FollowLine();
       //Behavior b2 = new Bridge();
       //Behavior b3 = new Labyrinth();
       Behavior b4 = new ReadBarcode();
@@ -36,7 +36,7 @@ public class nxt_robo {
       Behavior b11 = new Endboss();
       Behavior b12  = new SpinningEncounter();*/
 
-      Behavior [] bArray = {b0};
+      Behavior [] bArray = {b1};
 
       Arbitrator arby = new Arbitrator(bArray);
       arby.start();
