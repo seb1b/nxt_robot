@@ -111,8 +111,8 @@ public class StartPhase implements Behavior {
 				//timeStart=System.currentTimeMillis();
 				//System.out.println("too far"+ sonicSensor.getDistance());
 				//pilot.stop();
-				Motor.A.stop();
-				Motor.C.stop();
+				Motor.A.setSpeed(0);
+				Motor.C.setSpeed(0);
 				Motor.A.backward();
 				Motor.C.backward();
 				Delay.msDelay(200);
@@ -120,7 +120,7 @@ public class StartPhase implements Behavior {
 				Motor.C.backward();
 				//Delay.msDelay(500);
 				//pilot.backward();
-				Delay.msDelay(700);
+				Delay.msDelay(600);
 				//pilot.rotate(-180);
 				
 			}

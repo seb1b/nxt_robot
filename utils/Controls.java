@@ -34,17 +34,16 @@ public class Controls {
 		long start_time = System.currentTimeMillis();
 		Motor.A.setSpeed(900);
 		Motor.C.setSpeed(900);
-		while(lower_border < sonicSensor.getDistance() && upper_border > sonicSensor.getDistance()){
+		System.out.println("align");
+		while(doAlign(start_time,time_limit) && lower_border < sonicSensor.getDistance() && upper_border > sonicSensor.getDistance()){
 			//pilot.forward();
-			Motor.A.setSpeed(900);
-			Motor.C.setSpeed(900);
 			Motor.A.forward();
 			Motor.C.forward();
 			//System.out.println("good Distance"+ sonicSensor.getDistance());
 			
 			
 		}
-		while(lower_border >=sonicSensor.getDistance()){
+		while(doAlign(start_time,time_limit)&& lower_border >=sonicSensor.getDistance()){
 			Motor.A.setSpeed(900);
 			Motor.C.setSpeed(500);
 			Motor.A.forward();
@@ -52,7 +51,7 @@ public class Controls {
 			//pilot.steer(-SOFT_STEER);
 			//System.out.println("too close"+ sonicSensor.getDistance());
 		}
-		while(upper_border <= sonicSensor.getDistance()){
+		while(doAlign(start_time,time_limit)&&upper_border <= sonicSensor.getDistance()){
 			Motor.A.setSpeed(500);
 			Motor.C.setSpeed(900);
 			Motor.A.forward();

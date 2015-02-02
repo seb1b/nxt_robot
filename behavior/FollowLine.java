@@ -102,12 +102,12 @@ public class FollowLine implements Behavior {
   	public void action() {
   		
   		System.out.println("S: Follow Line");
-  		long start_time = System.currentTimeMillis();
+  		//long start_time = System.currentTimeMillis();
         while (!suppressed) {
         	if(start_run == 0){
         		
-        		control.align(15, 20,2000);
-        		Delay.msDelay(2000);
+        		control.align(15, 20,4000);
+        		Delay.msDelay(4000);
         		pilot.setTravelSpeed(4.5);
      			start_run = 1;
      			 
