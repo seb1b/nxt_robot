@@ -117,7 +117,7 @@ public class ReadBarcode implements Behavior {
 
 	private void driveStop() {
 		
-		Motor.A.stop();
-		Motor.C.stop();
+		Motor.A.setSpeed(0);
+		Motor.C.setSpeed(0);
 	}
 }

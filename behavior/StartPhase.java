@@ -61,22 +61,22 @@ public class StartPhase implements Behavior {
 			value.setStartphaseRunning(true);
 		while(!suppressed){
 			
-			while(!contact() && LOWER_BOARDER < sonicSensor.getDistance() && UPPER_BOARDER > sonicSensor.getDistance()){
+			while(!line() && !contact() && LOWER_BOARDER < sonicSensor.getDistance() && UPPER_BOARDER > sonicSensor.getDistance()){
 				pilot.forward();
 				System.out.println("good Distance"+ sonicSensor.getDistance());
 				
 				
 			}
-			while(!contact() && LOWER_BOARDER >+sonicSensor.getDistance()){
+			while(!line()&& !contact() && LOWER_BOARDER >+sonicSensor.getDistance()){
 				pilot.steer(-SOFT_STEER);
 				System.out.println("too close"+ sonicSensor.getDistance());
 			}
-			while(!contact() && UPPER_BOARDER <= sonicSensor.getDistance()&&NO_WALL >= sonicSensor.getDistance()){
+			while(!line()&& !contact() && UPPER_BOARDER <= sonicSensor.getDistance()&&NO_WALL >= sonicSensor.getDistance()){
 				pilot.steer(SOFT_STEER);
 				System.out.println("too far"+ sonicSensor.getDistance());
 			}
 			
-			while(!contact() && NO_WALL <= sonicSensor.getDistance()){
+			while(!line()&&!contact() && NO_WALL <= sonicSensor.getDistance()){
 				pilot.steer(HARD_STEER);
 				System.out.println("no wall"+ sonicSensor.getDistance());
 			}
@@ -92,12 +92,7 @@ public class StartPhase implements Behavior {
 				
 			}
 			
-			if(lightSensor.getLightValue() > 50){
-				System.out.println("gotlight");
-				pilot.stop();
-				Values.Instance().setCallCodeReader(true);
-				suppressed = true;
-			}
+			
 			
 		}
 		}
@@ -111,6 +106,19 @@ public class StartPhase implements Behavior {
 	}
 
 
+	
+	boolean line(){
+		boolean on_line = false;
+		if(lightSensor.getLightValue() > 50){
+			System.out.println("gotlight");
+			pilot.stop();
+			on_line = true;
+			Values.Instance().setCallCodeReader(true);
+			suppressed = true;
+		}
+			return on_line;
+		
+	}
 		
 	boolean contact(){
 		return (touch_l.isPressed()||touch_r.isPressed()) ;
