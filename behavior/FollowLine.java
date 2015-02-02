@@ -1,6 +1,7 @@
 package behavior;
 
 
+import utils.Controls;
 import utils.Values;
 import lejos.nxt.Button;
 import lejos.nxt.ColorSensor;
@@ -8,6 +9,7 @@ import lejos.nxt.LightSensor;
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.TouchSensor;
+import lejos.nxt.UltrasonicSensor;
 import lejos.nxt.comm.Bluetooth;
 import lejos.nxt.comm.NXTConnection;
 import lejos.robotics.navigation.DifferentialPilot;
@@ -21,6 +23,7 @@ import lejos.util.PIDController;
 
 
 public class FollowLine implements Behavior {
+
 	private boolean suppressed = false;
 	private DifferentialPilot pilot;
 	private PIDController pid;
@@ -29,7 +32,8 @@ public class FollowLine implements Behavior {
 	private Values value = Values.Instance();
 	TouchSensor touch_l;
 	TouchSensor touch_r;
-
+	UltrasonicSensor sonicSensor;
+	Controls control;
 	
 	public FollowLine() {
 		/*SLOW BUT WORKING BACKUP VALUES
@@ -60,10 +64,11 @@ public class FollowLine implements Behavior {
 		 */
 		
 
-		System.out.println("FOLLOW LINEE");
-
+		//System.out.println("FOLLOW LINEE");
+		control = Controls.Instance();
 		touch_l = new TouchSensor(SensorPort.S1);
 		touch_r = new TouchSensor(SensorPort.S4);
+		sonicSensor = new UltrasonicSensor(SensorPort.S2);
 		
 	      pid = new PIDController(45, 1);
 	      pid.setPIDParam(PIDController.PID_KP, 10.0f);
@@ -72,7 +77,7 @@ public class FollowLine implements Behavior {
 	      pid.setPIDParam(PIDController.PID_LIMITHIGH, 200);
 	      pid.setPIDParam(PIDController.PID_LIMITLOW, -200);
 	       pilot = new DifferentialPilot(1.3f, 3.94f, Motor.A, Motor.C, false); 
-	      	      pilot.setTravelSpeed(5);
+	      	      pilot.setTravelSpeed(4.5);
 	      pilot.setRotateSpeed(180);
 	      
 	      detector = new LightSensor(SensorPort.S3);
@@ -82,8 +87,9 @@ public class FollowLine implements Behavior {
       
     public boolean takeControl() {
 
-    	System.out.println("checking foloow"+value.getScenario());
+    	
   		if(value.getScenario() == 1){
+  			//System.out.println(" foloow line"+value.getScenario());
   			return true;
   		}else{
   			return false;
@@ -96,37 +102,44 @@ public class FollowLine implements Behavior {
   	public void action() {
   		
   		System.out.println("S: Follow Line");
-  		 
+  		long start_time = System.currentTimeMillis();
         while (!suppressed) {
         	if(start_run == 0){
-     			 pilot.setTravelSpeed(100);
-     			 pilot.forward();
-     			Delay.msDelay(600);
-     			pilot.setTravelSpeed(5);
-     			pilot.steer(30);
-     			Delay.msDelay(500);
+        		
+        		control.align(15, 20,2000);
+        		Delay.msDelay(2000);
+        		pilot.setTravelSpeed(4.5);
      			start_run = 1;
      			 
      		 }
                           // range is from 200 to 500
            int sensor = detector.getLightValue();         
-           System.out.println("light" + sensor);
+           //System.out.println("light" + sensor);
            int speedDelta = pid.doPID(sensor);
           // System.out.println("steering" + speedDelta);
-        
+           if(Math.abs(speedDelta)<30){
+        	   pilot.setTravelSpeed(10);
+           }else{
+        	   pilot.setTravelSpeed(4.5);
+           }
+        	
            pilot.steer(speedDelta);
+              
            if(reached_dest()){
+        	   System.out.println("ddest reached");
         	   suppressed = true;
            }
            
            
         }
-        pilot.rotateRight();
+        
+        	
+    		pilot.rotate(-160);
+        	control.align(10, 15,1500);
+        	Delay.msDelay(1500);
         	pilot.setTravelSpeed(30);
-        	pilot.rotate(-180);
-        	//Delay.msDelay(300);
         	pilot.forward();
-        	Delay.msDelay(2000);
+        	Delay.msDelay(500);
         	value.incScenario();
   			
   		}
@@ -151,7 +164,9 @@ public class FollowLine implements Behavior {
   	}
   	
 
+
 }
+
  
 
     /*  Motor.A.setSpeed(SPEED);

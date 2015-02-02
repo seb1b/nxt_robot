@@ -38,7 +38,7 @@ public class ReadBarcode implements Behavior {
 		suppressed = false;
 
 		driveBackward();
-		Delay.msDelay(400);
+		Delay.msDelay(800);
 		
 		driveForward();
 
@@ -69,11 +69,12 @@ public class ReadBarcode implements Behavior {
 
 		started = false;
 		onLine  = false;
+		boolean reading =true;
 		long startTime = 0;
 		startTime = System.currentTimeMillis();
 		int lineCount = 0;
 
-		while (true) {
+		while (reading) {
 
 			if (!onLine && light.getLightValue() >= 50) {
 				
@@ -89,7 +90,7 @@ public class ReadBarcode implements Behavior {
 			
 			// Stop if more than one Line is found or 2 seconds passed
 			if((System.currentTimeMillis() - startTime) > 6000 || lineCount > 2) {
-				break;
+				reading = false;
 			}
 		}
 

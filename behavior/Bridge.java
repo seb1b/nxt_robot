@@ -27,7 +27,7 @@ public class Bridge implements Behavior {
 	
 
 	public boolean takeControl() {
-		if(Values.Instance().getScenario() == 4){
+		if(Values.Instance().getScenario() == 2){
 			return true;
 		}
 		return false;

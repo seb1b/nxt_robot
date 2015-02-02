@@ -1,5 +1,6 @@
 package behavior;
 
+import utils.Controls;
 import utils.Values;
 import lejos.robotics.navigation.DifferentialPilot;
 import lejos.robotics.subsumption.Behavior;
@@ -26,9 +27,11 @@ public class Labyrinth implements Behavior {
 	private static int SOFT_STEER = 40;
 	TouchSensor touch_l;
 	TouchSensor touch_r;
+	Controls control;
 	
 	
 	public Labyrinth() {
+		control = Controls.Instance();
 		sonicSensor = new UltrasonicSensor(SensorPort.S2);
 		touch_l = new TouchSensor(SensorPort.S1);
 		touch_r = new TouchSensor(SensorPort.S4);
@@ -51,24 +54,24 @@ public class Labyrinth implements Behavior {
 		//long timeStart=System.currentTimeMillis();
 		while(!suppressed){
 			
-			while(!contact() && LOWER_BOARDER < sonicSensor.getDistance() && UPPER_BOARDER > sonicSensor.getDistance()){
+			while(!control.line() && !contact() && LOWER_BOARDER < sonicSensor.getDistance() && UPPER_BOARDER > sonicSensor.getDistance()){
 				pilot.forward();
 				System.out.println("good Distance"+ sonicSensor.getDistance());
 				
 				
 			}
-			while(!contact() && LOWER_BOARDER >+sonicSensor.getDistance()){
+			while(!control.line()&& !contact() && LOWER_BOARDER >=sonicSensor.getDistance()){
 				pilot.steer(-SOFT_STEER);
 				System.out.println("too close"+ sonicSensor.getDistance());
 			}
-			while(!contact() && UPPER_BOARDER <= sonicSensor.getDistance()&&NO_WALL >= sonicSensor.getDistance()){
+			while(!control.line()&& !contact() && UPPER_BOARDER <= sonicSensor.getDistance()&&NO_WALL >= sonicSensor.getDistance()){
 				pilot.steer(SOFT_STEER);
 				System.out.println("too far"+ sonicSensor.getDistance());
 			}
 			
-			while(!contact() && NO_WALL <= sonicSensor.getDistance()){
+			while(!control.line()&&!contact() && NO_WALL <= sonicSensor.getDistance()){
 				pilot.steer(HARD_STEER);
-				System.out.println("too far"+ sonicSensor.getDistance());
+			//	System.out.println("no wall"+ sonicSensor.getDistance());
 			}
 			
 			if(contact()){
