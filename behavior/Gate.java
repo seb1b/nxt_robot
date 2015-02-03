@@ -1,0 +1,166 @@
+package behavior;
+
+import lejos.robotics.navigation.DifferentialPilot;
+import lejos.robotics.subsumption.Behavior;
+import lejos.util.Delay;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+import javax.bluetooth.RemoteDevice;
+
+import utils.Controls;
+import utils.Values;
+import lejos.nxt.Button;
+import lejos.nxt.SensorPort;
+import lejos.nxt.TouchSensor;
+import lejos.nxt.comm.BTConnection;
+import lejos.nxt.comm.Bluetooth;
+
+public class Gate  implements Behavior {
+
+	private RemoteDevice remoteDevice;
+	private BTConnection connection;
+	private DataInputStream inputStream;
+	private DataOutputStream outputStream;
+	private Gate client;
+	private boolean success;
+	private Values values;
+	private Controls controls;
+	private DifferentialPilot pilot;
+
+
+	TouchSensor touch_l;
+	TouchSensor touch_r;
+
+	public Gate() {
+		values = Values.Instance();
+		controls = Controls.Instance();
+		pilot = values.getPilot();
+		touch_l = new TouchSensor(SensorPort.S1);
+		touch_r = new TouchSensor(SensorPort.S4);
+
+	}
+
+	@Override
+	public boolean takeControl() {
+		if(Values.Instance().getScenario() == 6){
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public void action() {
+
+		success = false;
+		
+		System.out.println("S: Calling Gate");
+		
+		controls.alignForTime(12, 14, 500, 9);
+		
+		// Wait for connection
+		while (!connectionToGateSuccessful()) {
+			sleep(50);
+		}
+
+		System.out.println("Connected to the gate.");
+
+		// Robot drives through the gate
+		System.out.println("Driving through.");
+
+		pilot.forward();
+
+		controls.alignForTime(12, 14, 5000, (int) Math.floor(pilot.getMaxTravelSpeed()));
+
+
+		// Tell the gate that robot passed, send a "I passed" signal
+		try {
+			outputStream.writeBoolean(true);
+			outputStream.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		System.out.println("Sended passing signal");
+
+
+		// Wait for answer from gate
+
+		try {
+			success = inputStream.readBoolean();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		if(success) {
+			// success, gate received the "I passed" signal
+			// gate is closed & connection is closed
+		}
+		else {
+			// no success, connection timeouted before gate recieved anything from robot
+			// gate is closed & connection is closed -> robot has to try again
+		}
+
+		System.out.println("Recieved: " + success);
+
+		controls.alignUntilDistance(12, 14, 50, 20);
+		
+		pilot.setTravelSpeed(15);
+		pilot.steer(-10);
+		Delay.msDelay(1000);
+		
+		System.out.println("incscenario");
+
+		values.incScenario();
+
+	}
+
+	@Override
+	public void suppress() {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Tries to connect to the gate
+	 * @return true if connection is establish, false otherwise
+	 */
+	public boolean connectionToGateSuccessful() {	
+
+		remoteDevice = new RemoteDevice("TestName", "00165304779A", 0);
+		if (remoteDevice == null) {
+			System.out.println("Found no remote device");
+			return false;
+		}
+
+
+		connection = Bluetooth.connect(remoteDevice);
+		if (connection == null) {
+			System.out.println("Connection is null");
+			return false;
+		}
+
+
+		inputStream = connection.openDataInputStream();
+		outputStream = connection.openDataOutputStream();
+
+		return (inputStream != null && outputStream != null);
+	}
+
+	/**
+	 * Puts the thread to sleep.
+	 * @param millis how long the thread sleeps
+	 */
+	private static void sleep(int millis) {
+		try {
+			Thread.sleep(millis);
+		} catch (InterruptedException e) {
+			// ignore
+		}
+	}
+
+}
