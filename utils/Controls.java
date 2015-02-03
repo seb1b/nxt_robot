@@ -34,11 +34,11 @@ public class Controls {
 	public void align(DifferentialPilot pilot, int lower_border, int upper_border,int time_limit){
 		long start_time = System.currentTimeMillis();
 
-			
-		while(doAlign(start_time,time_limit)){
+		//doAlign(start_time,time_limit)
+		while(lightSensor.getLightValue()<50){
 			int distance = sonicSensor.getDistance();
 
-			
+			System.out.println(distance);
 			pilot.setTravelSpeed(10);
 			
 

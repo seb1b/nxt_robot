@@ -70,15 +70,15 @@ public class FollowLine implements Behavior {
 		touch_r = new TouchSensor(SensorPort.S4);
 		sonicSensor = new UltrasonicSensor(SensorPort.S2);
 		
-	      pid = new PIDController(43, 5);
+		 pid = new PIDController(45, 5);
 	      pid.setPIDParam(PIDController.PID_KP, 10.0f);
-	      pid.setPIDParam(PIDController.PID_KI, 0.01f);
-	      pid.setPIDParam(PIDController.PID_KD, 150f);
+	      pid.setPIDParam(PIDController.PID_KI, 0.011f);
+	      pid.setPIDParam(PIDController.PID_KD, 200f);
 	      pid.setPIDParam(PIDController.PID_LIMITHIGH, 200);
 	      pid.setPIDParam(PIDController.PID_LIMITLOW, -200);
 	       pilot = new DifferentialPilot(1.3f, 3.94f, Motor.A, Motor.C, false); 
 	      	      pilot.setTravelSpeed(4.5);
-	     // pilot.setRotateSpeed(140);
+	      pilot.setRotateSpeed(180);
 	      
 	      detector = new LightSensor(SensorPort.S3);
 	}
@@ -107,7 +107,9 @@ public class FollowLine implements Behavior {
         	if(start_run == 0){
         		
         		control.align(pilot,20, 22,2300);
-        		Delay.msDelay(2300);
+        		//Delay.msDelay(2300);
+        		pilot.forward();
+        		Delay.msDelay(200);
         		//pilot.setTravelSpeed(4.5);
      			start_run = 1;
      			 
@@ -117,7 +119,7 @@ public class FollowLine implements Behavior {
            System.out.println("light" + sensor);
            int speedDelta = pid.doPID(sensor);
           System.out.println("steering" + speedDelta);
-           if(Math.abs(speedDelta)>90){
+        /*   if(Math.abs(speedDelta)>90){
         	   pilot.setTravelSpeed(4);
            }else if(Math.abs(speedDelta)>30){
         	   pilot.setTravelSpeed(4.5);
@@ -126,7 +128,7 @@ public class FollowLine implements Behavior {
         	   pilot.setTravelSpeed(5.5);
            }else{
         	   pilot.setTravelSpeed(7); 
-           }
+           }*/
         	
            pilot.steer(speedDelta);
               

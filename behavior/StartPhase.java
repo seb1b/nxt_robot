@@ -70,19 +70,19 @@ public class StartPhase implements Behavior {
 			value.setStartphaseRunning(true);
 			int counter = 0;
 		while(!suppressed) {
-			System.out.println(counter);
+			//System.out.println(counter);
 			contact = contact();
 			distance = sonicSensor.getDistance();
 			lineFound = control.line(pilot);
-			
+			System.out.println(distance);
 			pilot.setTravelSpeed(10);
-			counter++;
+			//counter++;
 			if(contact) {
 				pilot.stop();
 				
 				pilot.backward();
 				Delay.msDelay(600);
-				pilot.rotate(-180);
+				pilot.rotate(-90);
 				
 				continue;
 			}

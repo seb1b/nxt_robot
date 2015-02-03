@@ -43,7 +43,7 @@ public class ReadBarcode implements Behavior {
 		pilot.setTravelSpeed(pilot.getMaxTravelSpeed());
 
 		pilot.backward();
-		Delay.msDelay(800);
+		Delay.msDelay(600);
 		
 		pilot.forward();
 
@@ -94,7 +94,7 @@ public class ReadBarcode implements Behavior {
 			} 
 			
 			// Stop if more than one Line is found or 2 seconds passed
-			if((System.currentTimeMillis() - startTime) > 6000 || lineCount > 2) {
+			if((System.currentTimeMillis() - startTime) > 6000 || lineCount > 3) {
 				reading = false;
 			}
 		}
