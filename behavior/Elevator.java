@@ -32,6 +32,7 @@ public class Elevator implements Behavior{
 	private boolean suppressed = false;
 	
 	private boolean connected = false;
+	private DifferentialPilot pilot;
 	
 	private void setLightOver(){
 		if(ls.getLightValue() == 16){
@@ -53,6 +54,7 @@ public class Elevator implements Behavior{
 	
 	public Elevator(){
 		
+		 pilot = Values.Instance().getPilot();
 		 us = new UltrasonicSensor(SensorPort.S2);
 		 touch_l = new TouchSensor(SensorPort.S1);
 		 touch_r = new TouchSensor(SensorPort.S4); 
@@ -114,7 +116,7 @@ public class Elevator implements Behavior{
 		
 		
 		
-		DifferentialPilot pilot = Values.Instance().getPilot();
+		
 		
 //		pilot.forward();
 //		pilot.stop();
@@ -286,8 +288,7 @@ public class Elevator implements Behavior{
 				public void suppress() {
 					//System.out.println("S: bridge done");
 					Values.Instance().incScenario();
-					Motor.A.setSpeed(0);
-					Motor.C.setSpeed(0);
+					pilot.stop();
 			  		suppressed = true;
 					
 				}
@@ -295,41 +296,6 @@ public class Elevator implements Behavior{
 
 	
 	
-	
-	
-	private static void moveForward(){
-		Motor.C.setSpeed(500);
-		Motor.C.forward();
-		Motor.A.setSpeed(300);
-		Motor.A.forward();
-	}
-	
-	public static void stop(){
-		Motor.C.setSpeed(0);
-		
-		Motor.A.setSpeed(0);
-		
-	}
-	
-	private static void moveBackward(){
-		Motor.C.backward();
-		//Motor.A.setSpeed(300);
-		Motor.A.backward();
-	}
-	
-	
-	
-	private static void moveRight(){
-		Motor.C.backward();
-		//Motor.A.setSpeed(300);
-		Motor.A.forward();
-	}
-	
-	private static void moveLeft(){
-		Motor.C.forward();
-		//Motor.A.setSpeed(300);
-		Motor.A.backward();
-	}
 	
 	
 

@@ -124,7 +124,7 @@ public class FollowLine implements Behavior {
         			
         			if(end_reached){
 						System.out.println("end reached");
-						pilot.rotate((-10-(counter-1)*factor)/2);
+						pilot.rotate((10+(counter-1)*factor)/2);
 						pilot.stop();
         				suppress();
         			}
