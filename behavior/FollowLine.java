@@ -69,7 +69,7 @@ public class FollowLine implements Behavior {
 		//boolean LINE_RIGHT = false;
 		int counter = 1;
 		int value = 0;
-		
+		boolean end_reached = false;
        while (!suppressed) {
     	   if(start_run == 0){
        		
@@ -94,22 +94,28 @@ public class FollowLine implements Behavior {
         			while(!online()){
         				
         				if(!pilot.isMoving()){
-        					
-        				if(counter %2 == 0){
-        					pilot.rotate(10+(counter-1)*20,true);//left
-        					
-        				}else{
-        					pilot.rotate(-10-(counter-1)*20,true);//right
-        				}
-        				
         					pilot.travel(1);
-        					counter++;
+        					if(counter >5){
+        						end_reached = true;
+        					}
+        					
+        					if(counter %2 == 0){
+        						pilot.rotate(10+(counter-1)*30,true);//left
+        					
+        					}else{
+        						pilot.rotate(-10-(counter-1)*30,true);//right
+        					}
+        				
+        					
+        						counter++;
         				}
         				
         				
         			}
         			
-        			
+        			if(end_reached){
+        				suppress();
+        			}
         			
         			
         		}
