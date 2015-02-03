@@ -1,3 +1,4 @@
+
 package behavior;
 
 
@@ -38,7 +39,8 @@ public class StartPhase implements Behavior {
 		control = Controls.Instance();
 		touch_l = new TouchSensor(SensorPort.S1);
 		touch_r = new TouchSensor(SensorPort.S4);
-		pilot = new DifferentialPilot(1.3f, 3.94f, Motor.A, Motor.C, false); 
+		pilot = value.getPilot();
+		//pilot = new DifferentialPilot(1.3f, 3.94f, Motor.A, Motor.C, false); 
 		pilot.setTravelSpeed(10);
 		//pilot.setRotateSpeed(50);
 

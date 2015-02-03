@@ -7,6 +7,7 @@ import behavior.Labyrinth;
 import behavior.PlankBridge;
 import behavior.StartPhase;
 import behavior.ReadBarcode;
+import behavior.TurnTable;
 import lejos.robotics.subsumption.Arbitrator;
 import lejos.robotics.subsumption.Behavior;
 
@@ -33,6 +34,8 @@ public class nxt_robo {
       Behavior b4 = new PlankBridge();
       Behavior b5 = new Labyrinth();
       Behavior b6 = new ReadBarcode();
+      
+     // Behavior b8 = new TurnTable();
       
       
       Behavior b7 = new Bootstrap();

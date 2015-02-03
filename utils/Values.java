@@ -21,7 +21,7 @@ public class Values {
 	private DifferentialPilot pilot;
 
 	private Values() {
-		this.pilot = null;
+		this.pilot =  new DifferentialPilot(3.5, 22.2, Motor.A, Motor.C, false);
 		this.scenario = 0;
 		this.resetStarted = false;
 		this.callCodeReader = false;
@@ -94,9 +94,9 @@ public class Values {
 	}
 	
 	public DifferentialPilot getPilot() {
-		if(pilot == null){
+	/*	if(pilot == null){
 			pilot = new DifferentialPilot(1.3f, 3.94f, Motor.A, Motor.C, false);
-		}
+		}*/
 		
 		return pilot;
 	}
