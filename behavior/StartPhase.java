@@ -24,7 +24,7 @@ public class StartPhase implements Behavior {
 	private static int LOWER_BORDER = 14;
 	private static int UPPER_BORDER = 17;
 	private static int NO_WALL = 70;
-	private static int HARD_STEER = 75;
+	private static int HARD_STEER = 70;
 	private static int SOFT_STEER = 45;
 	TouchSensor touch_l;
 	TouchSensor touch_r;
@@ -81,7 +81,7 @@ public class StartPhase implements Behavior {
 				pilot.stop();
 				
 				pilot.backward();
-				Delay.msDelay(600);
+				Delay.msDelay(200);
 				pilot.rotate(-90);
 				
 				continue;
