@@ -38,7 +38,7 @@ public class Controls {
 	
 	public void alignUntilLight(int lower_border, int upper_border, int light_value) {
 		
-		pilot.setTravelSpeed(30);
+		pilot.setTravelSpeed(20);
 		
 		while(lightSensor.getLightValue() < light_value) {
 			int distance = sonicSensor.getDistance();
@@ -68,7 +68,7 @@ public class Controls {
 	
 	public void alignUntilDistance(int lower_border, int upper_border, int threshold) {
 		int distance = 999;
-		pilot.setTravelSpeed(30);
+		pilot.setTravelSpeed(20);
 		
 		while(distance < threshold) {
 			distance = sonicSensor.getDistance();

@@ -89,6 +89,7 @@ public class StartPhase implements Behavior {
 				
 			if(lineFound) {
 				Values.Instance().setCallCodeReader(true);
+				pilot.stop();
 				suppressed = true;
 				continue;
 			}

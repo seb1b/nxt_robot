@@ -51,7 +51,7 @@ public class FollowLine implements Behavior {
 
     	
   		if(value.getScenario() == 1){
-  			System.out.println(" foloow line"+value.getScenario());
+  			//System.out.println(" foloow line"+value.getScenario());
   			return true;
   		}else{
   			return false;
@@ -60,7 +60,7 @@ public class FollowLine implements Behavior {
 
   	public void action() {
   		
-  	  System.out.println("S: Follow Line");
+  	  //System.out.println("S: Follow Line");
     
         //	suppress();
        
@@ -70,11 +70,12 @@ public class FollowLine implements Behavior {
 		int counter = 1;
 		int value = 0;
 		boolean end_reached = false;
-		int factor = 20;
+		int factor = 10;
        while (!suppressed) {
     	   if(start_run == 0){
-       		
+       		System.out.println("looking for line");
        		control.alignUntilLight(20, 22,60);
+       		Delay.msDelay(1500);
        		pilot.setTravelSpeed(15);
     			start_run = 1;
     			 
@@ -95,21 +96,23 @@ public class FollowLine implements Behavior {
         			while(!online()){
         				
         				if(!pilot.isMoving()){
-        					pilot.travel(1);
+        					
         					if(counter >5){
 
         						end_reached = true;
         						break;
         					}
         					if(counter > 2){
-        						factor = 30;
+        						factor = 20;
         					}
         					
         					if(counter %2 == 0){
-        						pilot.rotate(10+(counter-1)*factor,true);//right
-        					
+        						pilot.travel(1);
+        						pilot.rotate(10+(counter-1)*factor,true); //left    					
         					}else{
-        						pilot.rotate(-10-(counter-1)*factor,true);//left
+        						
+        						pilot.rotate(-10-(counter-1)*factor,true);//right
+
         					}
         				
         					
@@ -121,6 +124,8 @@ public class FollowLine implements Behavior {
         			
         			if(end_reached){
 						System.out.println("end reached");
+						pilot.rotate((10+(counter-1)*factor)-(10+(counter-2)*factor));
+						pilot.stop();
         				suppress();
         			}
         			
@@ -141,22 +146,18 @@ boolean online(){
 	return detector.getLightValue()>55;
 	
 }
-  		
-
-
- boolean reached_dest(){
-	 boolean reached_destination = false;
-	 if((touch_l.isPressed()||touch_r.isPressed()) && detector.getLightValue()<40){
-		 reached_destination = true;
-		 
-		 
-	 }
-	 return reached_destination;
- }
-  	
+  		  	
 
   	public void suppress() {
-    	control.alignUntilDistance(12, 15,40);
+  		while(!online()){
+  			pilot.forward();
+  		}
+  		
+  		detector.setFloodlight(false);
+  		Delay.msDelay(1500);
+  		pilot.stop();
+  		//System.out.println("looking for distance");
+    	//control.alignUntilDistance(12, 15,40);
     	//Delay.msDelay(1500);;
     	value.incScenario();
   		suppressed = true;
