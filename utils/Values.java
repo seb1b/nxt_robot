@@ -1,6 +1,8 @@
 package utils;
 
 import lejos.nxt.LightSensor;
+import lejos.nxt.Motor;
+import lejos.robotics.navigation.DifferentialPilot;
 
 
 public class Values {
@@ -15,9 +17,11 @@ public class Values {
 	private boolean resetStarted;
 	private boolean is_startphase_running = false;
 	private boolean elevatorGreen;
+	
+	private DifferentialPilot pilot;
 
 	private Values() {
-		
+		this.pilot = null;
 		this.scenario = 0;
 		this.resetStarted = false;
 		this.callCodeReader = false;
@@ -87,6 +91,14 @@ public class Values {
 
 	public boolean isResetStarted() {
 		return resetStarted;
+	}
+	
+	public DifferentialPilot getPilot() {
+		if(pilot == null){
+			pilot = new DifferentialPilot(1.3f, 3.94f, Motor.A, Motor.C, false);
+		}
+		
+		return pilot;
 	}
 
 	public void setResetStarted(boolean resetStarted) {
