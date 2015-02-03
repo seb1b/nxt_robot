@@ -70,15 +70,18 @@ public class Controls {
 	public void alignUntilDistance(int lower_border, int upper_border, int threshold, int speed) {
 		int distance = -1;
 		pilot.setTravelSpeed(speed);
-
-
+		pilot.setTravelSpeed(30);
+		int count_thresh = 0;
 		
-		while(distance < threshold) {
+		while(count_thresh > 20) {
 			distance = sonicSensor.getDistance();
+			
+			if(distance > threshold) {
+				count_thresh++;
+			}
 
 			System.out.println(distance);
 			
-
 			// Good distance
 			if(lower_border < distance && upper_border > distance) {
 				pilot.forward();
