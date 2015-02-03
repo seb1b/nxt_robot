@@ -16,8 +16,10 @@ import lejos.nxt.UltrasonicSensor;
 import lejos.nxt.comm.BTConnection;
 import lejos.nxt.comm.Bluetooth;
 import lejos.robotics.navigation.DifferentialPilot;
+import lejos.robotics.subsumption.Behavior;
 
-public class TurnTable {
+
+public class TurnTable implements Behavior{
 
 	
 	UltrasonicSensor sonicSensor;
@@ -43,13 +45,13 @@ public class TurnTable {
 		sonicSensor = new UltrasonicSensor(SensorPort.S2);
 		touch_l = new TouchSensor(SensorPort.S1);
 		touch_r = new TouchSensor(SensorPort.S4);
-		pilot = new DifferentialPilot(1.3f, 3.94f, Motor.A, Motor.C, false); 
+		pilot =  Values.Instance().getPilot(); // new  DifferentialPilot(1.3f, 3.94f, Motor.A, Motor.C, false); 
 
 	}
 
 	public boolean takeControl() {
 
-		if(Values.Instance().getScenario() == 5){
+		if(Values.Instance().getScenario() == 9){
 			return true;
 		}
 		return false;
@@ -58,7 +60,7 @@ public class TurnTable {
 	private DataOutputStream dataOutputStream;
 	private DataInputStream dataInputStream;
 
-	private void action() {
+	public void action() {
     
 		String deviceName = "TurnTable";
 		RemoteDevice device = lookupDevice(deviceName);
@@ -70,6 +72,11 @@ public class TurnTable {
 			TurnTableCommand command = receiveCommand();
 			assertCommand(command, TurnTableCommand.HELLO);
 
+			pilot.forward();
+			while(!touch_l.isPressed() || !touch_r.isPressed())
+				;
+			pilot.stop();
+			
 			// drive forward
 
 			sendCommand(TurnTableCommand.TURN);
@@ -77,6 +84,8 @@ public class TurnTable {
 			command = receiveCommand();
 			assertCommand(command, TurnTableCommand.DONE);
 
+			pilot.backward();
+			
 			// drive backward
 
 			sendCommand(TurnTableCommand.CYA);
@@ -131,6 +140,13 @@ public class TurnTable {
 
 	private void log(String message) {
 		System.out.println(message);
+	}
+
+
+	@Override
+	public void suppress() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

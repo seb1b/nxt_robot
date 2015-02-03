@@ -70,11 +70,12 @@ public class FollowLine implements Behavior {
 		int counter = 1;
 		int value = 0;
 		boolean end_reached = false;
+		int factor = 20;
        while (!suppressed) {
     	   if(start_run == 0){
        		
-       		control.align(20, 22,2300);
-       		pilot.setTravelSpeed(12);
+       		control.alignUntilLight(20, 22,60);
+       		pilot.setTravelSpeed(15);
     			start_run = 1;
     			 
        		}
@@ -96,14 +97,19 @@ public class FollowLine implements Behavior {
         				if(!pilot.isMoving()){
         					pilot.travel(1);
         					if(counter >5){
+
         						end_reached = true;
+        						break;
+        					}
+        					if(counter > 2){
+        						factor = 30;
         					}
         					
         					if(counter %2 == 0){
-        						pilot.rotate(10+(counter-1)*30,true);//left
+        						pilot.rotate(10+(counter-1)*factor,true);//right
         					
         					}else{
-        						pilot.rotate(-10-(counter-1)*30,true);//right
+        						pilot.rotate(-10-(counter-1)*factor,true);//left
         					}
         				
         					
@@ -114,6 +120,7 @@ public class FollowLine implements Behavior {
         			}
         			
         			if(end_reached){
+						System.out.println("end reached");
         				suppress();
         			}
         			
@@ -149,8 +156,8 @@ boolean online(){
   	
 
   	public void suppress() {
-    	control.align(10, 15,1500);
-    	Delay.msDelay(1500);;
+    	control.alignUntilDistance(12, 15,40);
+    	//Delay.msDelay(1500);;
     	value.incScenario();
   		suppressed = true;
   	}
