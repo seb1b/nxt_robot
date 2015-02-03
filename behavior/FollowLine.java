@@ -73,8 +73,8 @@ public class FollowLine implements Behavior {
        while (!suppressed) {
     	   if(start_run == 0){
        		
-       		control.align(20, 22,2300);
-       		pilot.setTravelSpeed(12);
+       		control.alignUntilLight(20, 22,60);
+       		pilot.setTravelSpeed(15);
     			start_run = 1;
     			 
        		}
@@ -149,8 +149,8 @@ boolean online(){
   	
 
   	public void suppress() {
-    	control.align(10, 15,1500);
-    	Delay.msDelay(1500);;
+    	control.alignUntilDistance(12, 15,40);
+    	//Delay.msDelay(1500);;
     	value.incScenario();
   		suppressed = true;
   	}

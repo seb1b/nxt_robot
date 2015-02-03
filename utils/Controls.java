@@ -36,14 +36,13 @@ public class Controls {
 		}
 	}
 	
-	public void alignUntilLight(int lower_border, int upper_border) {
+	public void alignUntilLight(int lower_border, int upper_border, int light_value) {
 		
-		pilot.setTravelSpeed(10);
+		pilot.setTravelSpeed(30);
 		
-		while(lightSensor.getLightValue() < 55) {
+		while(lightSensor.getLightValue() < light_value) {
 			int distance = sonicSensor.getDistance();
 
-<<<<<<< HEAD
 			System.out.println(distance);
 			
 			// Good distance
@@ -69,16 +68,13 @@ public class Controls {
 	
 	public void alignUntilDistance(int lower_border, int upper_border, int threshold) {
 		int distance = 999;
-		pilot.setTravelSpeed(10);
+		pilot.setTravelSpeed(30);
 		
 		while(distance < threshold) {
 			distance = sonicSensor.getDistance();
 
 			System.out.println(distance);
 			
-=======
-			System.out.println(distance);			
->>>>>>> d8d9fc9ad7054dd8b8cfcf71434244449d63a481
 			// Good distance
 			if(lower_border < distance && upper_border > distance) {
 				pilot.forward();
@@ -111,11 +107,9 @@ public class Controls {
 	
 	public boolean foundLine(){
 		boolean on_line = false;
-<<<<<<< HEAD
+		
 		if(lightSensor.getLightValue() > 58){
-=======
-		if(lightSensor.getLightValue() > 57){
->>>>>>> d8d9fc9ad7054dd8b8cfcf71434244449d63a481
+
 			System.out.println("gotlight");
 			on_line = true;
 		}

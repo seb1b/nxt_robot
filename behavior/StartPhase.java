@@ -39,7 +39,7 @@ public class StartPhase implements Behavior {
 		touch_l = new TouchSensor(SensorPort.S1);
 		touch_r = new TouchSensor(SensorPort.S4);
 		pilot = Values.Instance().getPilot(); 
-		pilot.setTravelSpeed(10);
+		//pilot.setTravelSpeed(30);
 		//pilot.setRotateSpeed(50);
 
 	}
@@ -62,7 +62,7 @@ public class StartPhase implements Behavior {
 		boolean lineFound = false;
 		int distance = 9999;
 		
-		pilot.setTravelSpeed(10);
+		pilot.setTravelSpeed(30);
 		
 	
 		if(!value.isStartphaseRunning()){
