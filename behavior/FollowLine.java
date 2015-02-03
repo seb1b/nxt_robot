@@ -38,9 +38,9 @@ public class FollowLine implements Behavior {
 		System.out.println("S: construct done");
 	      //pilot = new DifferentialPilot(1.3f, 3.94f, Motor.A, Motor.C, false); 
 		  pilot = value.getPilot();
-	      pilot.setTravelSpeed(10);
+	      pilot.setTravelSpeed(12);
 	     // pilot.setRotateSpeed(70);
-	      
+	      control = new Controls();
 	      detector = new LightSensor(SensorPort.S3);
 	      
 	}
@@ -73,8 +73,8 @@ public class FollowLine implements Behavior {
        while (!suppressed) {
     	   if(start_run == 0){
        		
-       		//control.align(20, 22,2300);
-       		pilot.setTravelSpeed(10);
+       		control.align(20, 22,2300);
+       		pilot.setTravelSpeed(12);
     			start_run = 1;
     			 
        		}

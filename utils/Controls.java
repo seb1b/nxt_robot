@@ -43,6 +43,7 @@ public class Controls {
 		while(lightSensor.getLightValue() < 55) {
 			int distance = sonicSensor.getDistance();
 
+<<<<<<< HEAD
 			System.out.println(distance);
 			
 			// Good distance
@@ -75,6 +76,9 @@ public class Controls {
 
 			System.out.println(distance);
 			
+=======
+			System.out.println(distance);			
+>>>>>>> d8d9fc9ad7054dd8b8cfcf71434244449d63a481
 			// Good distance
 			if(lower_border < distance && upper_border > distance) {
 				pilot.forward();
@@ -107,7 +111,11 @@ public class Controls {
 	
 	public boolean foundLine(){
 		boolean on_line = false;
+<<<<<<< HEAD
 		if(lightSensor.getLightValue() > 58){
+=======
+		if(lightSensor.getLightValue() > 57){
+>>>>>>> d8d9fc9ad7054dd8b8cfcf71434244449d63a481
 			System.out.println("gotlight");
 			on_line = true;
 		}
