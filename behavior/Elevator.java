@@ -114,7 +114,6 @@ public class Elevator implements Behavior{
 		
 		
 		
-		
 		DifferentialPilot pilot = Values.Instance().getPilot();
 		
 //		pilot.forward();
@@ -170,7 +169,7 @@ public class Elevator implements Behavior{
 				Motor.B.rotate(90); 		//rotiere sensor wieder seitlich
 				pilot.stop();
 				pilot.backward();
-				Delay.msDelay(1000);
+				Delay.msDelay(700);
 				pilot.stop();
 				pilot.rotate(-60); 
 				
@@ -274,6 +273,7 @@ public class Elevator implements Behavior{
 				BluetoothTest.closeConnection();
 				
 				suppress();
+				Values.Instance().incScenario();
 				
 				
 				
