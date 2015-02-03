@@ -97,22 +97,18 @@ public class Controls {
 		Motor.A.stop();
 		Motor.C.stop();
 	}
-	//DifferentialPilot pilot
-	public boolean line(DifferentialPilot pilot){
+	
+	public boolean foundLine(){
 		boolean on_line = false;
 		if(lightSensor.getLightValue() > 50){
 			System.out.println("gotlight");
-			pilot.stop();
-			//Motor.A.setSpeed(0);
-			//Motor.C.setSpeed(0);
+			Values.Instance().getPilot().stop();
 			on_line = true;
-			Values.Instance().setCallCodeReader(true);
-			found_line = true;
-			//suppressed = true;
 		}
 			return on_line;
 		
 	}
+
 	
 	private boolean doAlign(long time, int time_limit) {
 		return (System.currentTimeMillis() - time) < time_limit;
