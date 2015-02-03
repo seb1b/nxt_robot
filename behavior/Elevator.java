@@ -8,7 +8,9 @@ import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.TouchSensor;
 import lejos.nxt.UltrasonicSensor;
+import lejos.robotics.navigation.DifferentialPilot;
 import lejos.robotics.subsumption.Behavior;
+import lejos.util.Delay;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -29,6 +31,8 @@ public class Elevator implements Behavior{
 	private boolean lightOver;
 	private boolean suppressed = false;
 	
+	private boolean connected = false;
+	
 	private void setLightOver(){
 		if(ls.getLightValue() == 16){
 			lightOver = false;
@@ -36,10 +40,14 @@ public class Elevator implements Behavior{
 	}
 	
 	
-
 	
-
-
+	public boolean getIsPressed(){
+		boolean isPressed = false;
+		if(touch_l.isPressed() || touch_r.isPressed()){
+			isPressed = true;
+		}
+		return isPressed;
+	}
 
 	
 	
@@ -51,7 +59,9 @@ public class Elevator implements Behavior{
 		 ls = new LightSensor(SensorPort.S3);
 		 value = Values.Instance();
 
-	}	 
+	}	
+	
+	
 	
     public boolean takeControl() {
 
@@ -78,82 +88,139 @@ public class Elevator implements Behavior{
 				}
 			}
 			*/
+    
+    public void rotateRight(int degrees){
+    	Motor.C.rotate(degrees);
+    	Motor.A.setSpeed(200);
+    	Motor.C.setSpeed(200);
+    	Delay.msDelay(200);
+
+    	
+    }
+    
+    /*
+    public static void main(String[] args){
+    	//Elevator el = new Elevator();
+    	//DifferentialPilot pilot = Values.Instance().getPilot();
+    	//pilot.rotate(180);
+    	LightSensor ls = new LightSensor(SensorPort.S3); //30 als Schwellwert passt
+    	
+    }*/
+    
 	@Override
 	public void action() {
-		// TODO Auto-generated method stub
+
+		
+		
+		
+		
+		
+		DifferentialPilot pilot = Values.Instance().getPilot();
+		
+//		pilot.forward();
+//		pilot.stop();
+//		pilot.rotate(-20);
+//		Motor.B.rotate(-90);
+//		Delay.msDelay(1000);
+//		Motor.B.rotate(90);
+//		Delay.msDelay(1000);
+		
 		
 			System.out.println("elevator start");
-			//moveForward();
-			//stop();
+//			//moveForward();
+//			//stop();
+//			
+//			/* wir sind shcon verbunden, daher wird di platte grün sein für uns 
+//			 * fahre also auf die platte drauf*/
+//			while(!Values.Instance().getElevatorGreen(ls)){
+//				System.out.println(ls.getLightValue());
+//				while(us.getDistance() < 9){
+//					moveForward();
+//				} while(us.getDistance() > 9){
+//					//Fall tritt wsh nie ein
+//					moveRight();
+//				}
+//			}
 			
-			/* wir sind shcon verbunden, daher wird di platte grün sein für uns 
-			 * fahre also auf die platte drauf*/
-			while(!Values.Instance().getElevatorGreen(ls)){
-				System.out.println(ls.getLightValue());
-				while(us.getDistance() < 9){
-					moveForward();
-				} while(us.getDistance() > 9){
-					//Fall tritt wsh nie ein
-					moveRight();
-				}
+			while (!BluetoothTest.openConnection(BluetoothTest.LIFT)) {
+				BluetoothTest.sleep(1000); // waiting for free connection
 			}
 		
 
 				/*auf der platte, fahre bis wir kein grün mehr sehen*/
 
-				while(Values.Instance().getElevatorGreen(ls))
+				while(!getIsPressed())
 				{
 					if(us.getDistance() < 9){
-						moveForward();
+						pilot.steer(20);
 						continue;
-				} if(us.getDistance() > 9){
+				} if(us.getDistance() >= 9){
 						//Fall tritt wsh nie ein
-						moveRight();
+						pilot.stop();
+						pilot.rotate(-10);
 				continue;
 				} 
 						
 				}
 				
-				/*im eingangsbereich*/
-				Motor.B.rotate(70); 		//rotiere sensor wieder seitlich
+				/* *********************im eingangsbereich*********************************** */
+
+				pilot.stop();
+				Delay.msDelay(1000);
+				Motor.B.rotate(90); 		//rotiere sensor wieder seitlich
+				pilot.stop();
+				pilot.backward();
+				Delay.msDelay(1000);
+				pilot.stop();
+				pilot.rotate(-60); 
 				
-					while(!touch_l.isPressed() || !touch_r.isPressed() ){
+					//while(!touch_l.isPressed() || !touch_r.isPressed() ){
+					while(!touch_l.isPressed() && !touch_r.isPressed() ){
 						System.out.println("auf gehts");
 						
+						/*
 						 if(touch_l.isPressed()){
-//							moveBackward();
+							moveBackward();
+							Motor.A.setSpeed(200);
+							Motor.C.setSpeed(200);
+							Delay.msDelay(100); //TODO Wert gut?
 //							BluetoothTest.sleep (200);
-							moveRight();
-							BluetoothTest.sleep (100);
+							//moveRight();
+							pilot.rotate(-40);
+							//BluetoothTest.sleep (100);
 							continue;
 						} if(touch_r.isPressed()){
-//							moveBackward();
+							moveBackward();
+							Motor.A.setSpeed(200);
+							Motor.C.setSpeed(200);
+							Delay.msDelay(100);
 //							BluetoothTest.sleep (200);
-							moveLeft();
-							BluetoothTest.sleep (100);
+							//moveLeft();
+							pilot.rotate(40);
+							//BluetoothTest.sleep (100);
 							continue;
-						}
-						if(us.getDistance() > 9){			//zu weit we, also bewege dich nach links
-							moveLeft();	
-							moveForward();
+						}*/
+						if(us.getDistance() > 5){	
+							//zu weit we, also bewege dich nach links
+							System.out.println("Distanz: " + us.getDistance() );
+							pilot.steer(20);
+							
 								continue;
-						} if(us.getDistance() <= 9){
+						} if(us.getDistance() <= 5){
 								//Fall tritt wsh nie ein	//zu weit dran, also bewege dich etwas weg
-								moveRight();
-								moveForward();
+							pilot.stop();//zu nah, also bewege dich nach rechts
+							pilot.rotate(-20);
+							System.out.println("Distanz: " + us.getDistance() );
 						continue;
 						} 
-
 	}
 			
 					/*im aufzug*/
 					
-					stop();
+					pilot.stop();
 					
 					/* verbinde mit bluetooth */
-					while (!BluetoothTest.openConnection(BluetoothTest.LIFT)) {
-						BluetoothTest.sleep(1000); // waiting for free connection
-					}
+
 					
 					BluetoothTest.sleep(100);	//warte kurz im aufzug
 					System.out.println("IM AUFZUG");
@@ -162,7 +229,7 @@ public class Elevator implements Behavior{
 					BluetoothTest.goDown();
 
 			LCD.drawString("Going down", 0, 1);
-
+ 
 			while (!BluetoothTest.canExit()) {
 				LCD.drawString("Can exit: No", 0, 2);
 				BluetoothTest.sleep(100);
@@ -170,36 +237,39 @@ public class Elevator implements Behavior{
 			}
 			LCD.drawString("Can exit: Yes", 0, 2);
 			
-			/*wir sind draußen*/
+			/* ***********************wir sind draußen **************************** */
 			
 			
-			while((!touch_l.isPressed() || !touch_r.isPressed()) && (us.getDistance()<20)){
-				System.out.println("auf gehts");
-				
-				 if(touch_l.isPressed()){
-					moveBackward();
-					BluetoothTest.sleep (100);
-					moveRight();
-					BluetoothTest.sleep (50);
-					continue;
-				} if(touch_r.isPressed()){
-					moveBackward();
-					BluetoothTest.sleep (100);
-					moveLeft();
-					BluetoothTest.sleep (50);
-					continue;
-				}
-				if(us.getDistance() > 9){			//zu weit we, also bewege dich nach links
-					moveLeft();	
-					moveForward();
-						continue;
-				} if(us.getDistance() <= 9){
-						//Fall tritt wsh nie ein	//zu weit dran, also bewege dich etwas weg
-						moveRight();
-						moveForward();
-				continue;
-				} 
-			}		
+			
+//			while((!touch_l.isPressed() || !touch_r.isPressed()) && (us.getDistance()<20)){
+//				System.out.println("auf gehts");
+//				
+//				 if(touch_l.isPressed()){
+//					moveBackward();
+//					BluetoothTest.sleep (100);
+//					moveRight();
+//					BluetoothTest.sleep (50);
+//					continue;
+//				} if(touch_r.isPressed()){
+//					moveBackward();
+//					BluetoothTest.sleep (100);
+//					moveLeft();
+//					BluetoothTest.sleep (50);
+//					continue;
+//				}
+//				if(us.getDistance() > 9){			//zu weit we, also bewege dich nach links
+//					moveLeft();	
+//					moveForward();
+//						continue;
+//				} if(us.getDistance() <= 9){
+//						//Fall tritt wsh nie ein	//zu weit dran, also bewege dich etwas weg
+//						moveRight();
+//						moveForward();
+//				continue;
+//				} 
+//			}		
+			
+				pilot.forward();
 				
 				BluetoothTest.closeConnection();
 				
