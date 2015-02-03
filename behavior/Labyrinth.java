@@ -54,22 +54,22 @@ public class Labyrinth implements Behavior {
 		//long timeStart=System.currentTimeMillis();
 		while(!suppressed){
 			
-			while(!control.line() && !contact() && LOWER_BOARDER < sonicSensor.getDistance() && UPPER_BOARDER > sonicSensor.getDistance()){
+			while(!control.line(pilot) && !contact() && LOWER_BOARDER < sonicSensor.getDistance() && UPPER_BOARDER > sonicSensor.getDistance()){
 				pilot.forward();
 				System.out.println("good Distance"+ sonicSensor.getDistance());
 				
 				
 			}
-			while(!control.line()&& !contact() && LOWER_BOARDER >=sonicSensor.getDistance()){
+			while(!control.line(pilot)&& !contact() && LOWER_BOARDER >=sonicSensor.getDistance()){
 				pilot.steer(-SOFT_STEER);
 				System.out.println("too close"+ sonicSensor.getDistance());
 			}
-			while(!control.line()&& !contact() && UPPER_BOARDER <= sonicSensor.getDistance()&&NO_WALL >= sonicSensor.getDistance()){
+			while(!control.line(pilot)&& !contact() && UPPER_BOARDER <= sonicSensor.getDistance()&&NO_WALL >= sonicSensor.getDistance()){
 				pilot.steer(SOFT_STEER);
 				System.out.println("too far"+ sonicSensor.getDistance());
 			}
 			
-			while(!control.line()&&!contact() && NO_WALL <= sonicSensor.getDistance()){
+			while(!control.line(pilot)&&!contact() && NO_WALL <= sonicSensor.getDistance()){
 				pilot.steer(HARD_STEER);
 			//	System.out.println("no wall"+ sonicSensor.getDistance());
 			}

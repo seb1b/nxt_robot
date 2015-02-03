@@ -1,5 +1,6 @@
 
 import behavior.Bootstrap;
+import behavior.Elevator;
 import behavior.FollowLine;
 import behavior.Bridge;
 import behavior.Labyrinth;
@@ -28,12 +29,13 @@ public class nxt_robo {
       Behavior b1 = new FollowLine();
 
       Behavior b2 = new Bridge();
-      Behavior b3 = new PlankBridge();
-      Behavior b4 = new Labyrinth();
-      Behavior b5 = new ReadBarcode();
+  	  Elevator b3 = new Elevator();
+      Behavior b4 = new PlankBridge();
+      Behavior b5 = new Labyrinth();
+      Behavior b6 = new ReadBarcode();
       
       
-      Behavior b6 = new Bootstrap();
+      Behavior b7 = new Bootstrap();
 
       
      /* Behavior b3 = new FollowLine();
@@ -43,7 +45,7 @@ public class nxt_robo {
       Behavior b12  = new SpinningEncounter();*/
 
       //Behavior [] bArray = {b1};
-      Behavior [] bArray = {b0, b1, b2, b3, b4, b5, b6};
+      Behavior [] bArray = {b0, b1, b2, b3, b4, b5, b6,b7};
 
 
       Arbitrator arby = new Arbitrator(bArray);

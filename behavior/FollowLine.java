@@ -70,15 +70,15 @@ public class FollowLine implements Behavior {
 		touch_r = new TouchSensor(SensorPort.S4);
 		sonicSensor = new UltrasonicSensor(SensorPort.S2);
 		
-	      pid = new PIDController(45, 1);
+	      pid = new PIDController(43, 5);
 	      pid.setPIDParam(PIDController.PID_KP, 10.0f);
-	      pid.setPIDParam(PIDController.PID_KI, 0.011f);
-	      pid.setPIDParam(PIDController.PID_KD, 200f);
+	      pid.setPIDParam(PIDController.PID_KI, 0.01f);
+	      pid.setPIDParam(PIDController.PID_KD, 150f);
 	      pid.setPIDParam(PIDController.PID_LIMITHIGH, 200);
 	      pid.setPIDParam(PIDController.PID_LIMITLOW, -200);
 	       pilot = new DifferentialPilot(1.3f, 3.94f, Motor.A, Motor.C, false); 
 	      	      pilot.setTravelSpeed(4.5);
-	      pilot.setRotateSpeed(180);
+	     // pilot.setRotateSpeed(140);
 	      
 	      detector = new LightSensor(SensorPort.S3);
 	}
@@ -106,21 +106,26 @@ public class FollowLine implements Behavior {
         while (!suppressed) {
         	if(start_run == 0){
         		
-        		control.align(15, 20,4000);
-        		Delay.msDelay(4000);
-        		pilot.setTravelSpeed(4.5);
+        		control.align(pilot,20, 22,2300);
+        		Delay.msDelay(2300);
+        		//pilot.setTravelSpeed(4.5);
      			start_run = 1;
      			 
      		 }
                           // range is from 200 to 500
            int sensor = detector.getLightValue();         
-           //System.out.println("light" + sensor);
+           System.out.println("light" + sensor);
            int speedDelta = pid.doPID(sensor);
-          // System.out.println("steering" + speedDelta);
-           if(Math.abs(speedDelta)<30){
-        	   pilot.setTravelSpeed(10);
-           }else{
+          System.out.println("steering" + speedDelta);
+           if(Math.abs(speedDelta)>90){
+        	   pilot.setTravelSpeed(4);
+           }else if(Math.abs(speedDelta)>30){
         	   pilot.setTravelSpeed(4.5);
+           }
+           else if(Math.abs(speedDelta)>20){
+        	   pilot.setTravelSpeed(5.5);
+           }else{
+        	   pilot.setTravelSpeed(7); 
            }
         	
            pilot.steer(speedDelta);
@@ -133,14 +138,39 @@ public class FollowLine implements Behavior {
            
         }
         
-        	
-    		pilot.rotate(-160);
-        	control.align(10, 15,1500);
-        	Delay.msDelay(1500);
-        	pilot.setTravelSpeed(30);
-        	pilot.forward();
-        	Delay.msDelay(500);
-        	value.incScenario();
+        	suppress();
+		boolean LINE_LEFT = true;
+		boolean LINE_RIGHT = false;
+		int l_angle = 0;
+		int r_angle = 0;
+        	/*while(!suppressed){
+        		int value = detector.getLightValue();  
+        		if(value >= 46 &&value <= 52) {
+        			System.out.println("Forward");
+    				pilot.forward();
+    				l_angle = 0;
+    				r_angle = 0;
+    				continue;
+    			}
+    				
+    			if(value<46) {
+    				pilot.rotate(-l_angle, true);
+    				System.out.println("LEFT");
+    				l_angle++;
+    				continue;
+    			}
+    			
+    			// Good distance
+    			if(value>52) {
+    				System.out.println("RIGHT");
+    				pilot.rotate(r_angle, true);
+    				r_angle++;
+    				continue;
+    			}
+        		
+        		
+        	}*/
+
   			
   		}
 
@@ -160,6 +190,13 @@ public class FollowLine implements Behavior {
   	
 
   	public void suppress() {
+		pilot.rotate(-160);
+    	control.align(pilot,10, 15,1500);
+    	Delay.msDelay(1500);
+    	pilot.setTravelSpeed(30);
+    	pilot.forward();
+    	Delay.msDelay(500);
+    	value.incScenario();
   		suppressed = true;
   	}
   	

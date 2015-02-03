@@ -9,7 +9,7 @@ import lejos.nxt.UltrasonicSensor;
 import lejos.robotics.subsumption.Behavior;
 
 public class Bridge implements Behavior {
-	
+	boolean suppressed = false;
 	LightSensor ls;
 	UltrasonicSensor us;
 	long zstVorher;
@@ -21,7 +21,7 @@ public class Bridge implements Behavior {
 	private int treshold = 10;
 	
 	public Bridge(){
-		//ls = new LightSensor(SensorPort.S4);
+		ls = new LightSensor(SensorPort.S3);
 		us = new UltrasonicSensor(SensorPort.S2);
 	}
 	
@@ -39,16 +39,29 @@ public class Bridge implements Behavior {
 		
 		Motor.B.rotate(-90);
 		leftCurve(1000/speedFactor);
-		while(true){			
+		while(dark()){			
 			while(us.getDistance() < treshold){
 				moveForward();
 			} while(us.getDistance() > treshold){
-				if(treshold>30){ //Rampe wurde hochgefahren. Nötig, um Spalt zu überfahren
+				/*if(treshold>30){ //Rampe wurde hochgefahren. Nötig, um Spalt zu überfahren
 					treshold = 30;
-				}
+				}*/
 				moveRight();
 			}
 		}
+		suppress();
+	}
+	
+	private boolean dark(){
+		
+		boolean dark = true;
+		ls.setFloodlight(false);
+		System.out.println(ls.getLightValue());
+		if(ls.getLightValue() >35 ){
+			dark = false;
+			
+		}
+		return dark;
 	}
 	
 	public void leftCurve(long delay){
@@ -80,6 +93,11 @@ public class Bridge implements Behavior {
 	
 
 	public void suppress() {
+		System.out.println("S: bridge done");
+		Values.Instance().incScenario();
+		Motor.A.setSpeed(0);
+		Motor.C.setSpeed(0);
+  		suppressed = true;
 
 	}
 

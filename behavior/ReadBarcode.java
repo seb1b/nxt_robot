@@ -4,6 +4,7 @@ import utils.Values;
 import lejos.nxt.LightSensor;
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
+import lejos.robotics.navigation.DifferentialPilot;
 import lejos.robotics.subsumption.Behavior;
 import lejos.util.Delay;
 
@@ -13,6 +14,8 @@ public class ReadBarcode implements Behavior {
 
 	private Values values = Values.Instance();
 	private LightSensor light = new LightSensor(SensorPort.S3);
+	private DifferentialPilot pilot = new DifferentialPilot(1.3f, 3.94f, Motor.A, Motor.C, false); 
+
 	
 	private boolean onLine;
 	private boolean started;
@@ -21,7 +24,7 @@ public class ReadBarcode implements Behavior {
 	public boolean takeControl() {
 
 		if (values.isCallCodeReader()) {
-			System.out.println("barrcode");
+			//System.out.println("barrcode");
 			return true;
 		}
 		return false;
@@ -36,11 +39,13 @@ public class ReadBarcode implements Behavior {
 		//Delay.msDelay(2000);
 		values.setSuppressed(false);
 		suppressed = false;
+		
+		pilot.setTravelSpeed(pilot.getMaxTravelSpeed());
 
-		driveBackward();
+		pilot.backward();
 		Delay.msDelay(800);
 		
-		driveForward();
+		pilot.forward();
 
 		nLines = countLines();
 		
@@ -96,24 +101,6 @@ public class ReadBarcode implements Behavior {
 
 		return lineCount;
 
-	}
-
-	private void driveForward() {
-
-		Motor.A.setSpeed(600);
-		Motor.C.setSpeed(600);
-
-		Motor.A.forward();
-		Motor.C.forward();
-	}
-
-	private void driveBackward() {
-		
-		Motor.A.setSpeed(900);
-		Motor.C.setSpeed(900);
-
-		Motor.A.backward();
-		Motor.C.backward();
 	}
 
 	private void driveStop() {

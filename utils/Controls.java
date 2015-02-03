@@ -5,6 +5,7 @@ import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.UltrasonicSensor;
 import lejos.robotics.navigation.DifferentialPilot;
+import lejos.util.Delay;
 
 public class Controls {
 
@@ -30,34 +31,36 @@ public class Controls {
 		}
 	}
 	
-	public void align(int lower_border, int upper_border,int time_limit){
+	public void align(DifferentialPilot pilot, int lower_border, int upper_border,int time_limit){
 		long start_time = System.currentTimeMillis();
-		Motor.A.setSpeed(900);
-		Motor.C.setSpeed(900);
-		System.out.println("align");
-		while(doAlign(start_time,time_limit) && lower_border < sonicSensor.getDistance() && upper_border > sonicSensor.getDistance()){
-			//pilot.forward();
-			Motor.A.forward();
-			Motor.C.forward();
-			//System.out.println("good Distance"+ sonicSensor.getDistance());
+
 			
+		while(doAlign(start_time,time_limit)){
+			int distance = sonicSensor.getDistance();
+
 			
-		}
-		while(doAlign(start_time,time_limit)&& lower_border >=sonicSensor.getDistance()){
-			Motor.A.setSpeed(900);
-			Motor.C.setSpeed(500);
-			Motor.A.forward();
-			Motor.C.forward();
-			//pilot.steer(-SOFT_STEER);
-			//System.out.println("too close"+ sonicSensor.getDistance());
-		}
-		while(doAlign(start_time,time_limit)&&upper_border <= sonicSensor.getDistance()){
-			Motor.A.setSpeed(500);
-			Motor.C.setSpeed(900);
-			Motor.A.forward();
-			Motor.C.forward();
-			//pilot.steer(SOFT_STEER);
-			//System.out.println("too far"+ sonicSensor.getDistance());
+			pilot.setTravelSpeed(10);
+			
+
+			
+			// Good distance
+			if(lower_border < distance && upper_border > distance) {
+				pilot.forward();
+				continue;
+			}
+			
+			// Too far
+			if(lower_border >= distance) {
+				pilot.steer(-SOFT_STEER);
+				continue;
+			}
+						
+			// Too near
+			if(upper_border <= distance) {
+				pilot.steer(SOFT_STEER);
+				continue;
+			}
+			
 		}
 		
 }
@@ -95,13 +98,13 @@ public class Controls {
 		Motor.C.stop();
 	}
 	//DifferentialPilot pilot
-	public boolean line(){
+	public boolean line(DifferentialPilot pilot){
 		boolean on_line = false;
 		if(lightSensor.getLightValue() > 50){
 			System.out.println("gotlight");
-			//pilot.setTravelSpeed(0);
-			Motor.A.setSpeed(0);
-			Motor.C.setSpeed(0);
+			pilot.stop();
+			//Motor.A.setSpeed(0);
+			//Motor.C.setSpeed(0);
 			on_line = true;
 			Values.Instance().setCallCodeReader(true);
 			found_line = true;

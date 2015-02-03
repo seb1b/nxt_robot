@@ -1,5 +1,7 @@
 package utils;
 
+import lejos.nxt.LightSensor;
+
 
 public class Values {
 
@@ -12,6 +14,7 @@ public class Values {
 	
 	private boolean resetStarted;
 	private boolean is_startphase_running = false;
+	private boolean elevatorGreen;
 
 	private Values() {
 		
@@ -60,7 +63,15 @@ public class Values {
 
 	}
 
-
+	public boolean getElevatorGreen(LightSensor ls){
+		elevatorGreen = false;
+		ls.setFloodlight(false);
+		if(ls.getLightValue() <= 45 && ls.getLightValue() >= 40 ){
+			elevatorGreen = true;
+		}
+		return elevatorGreen;
+	}
+	
 	public int getScenario() {
 		return scenario;
 	}
