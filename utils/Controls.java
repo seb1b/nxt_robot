@@ -36,19 +36,14 @@ public class Controls {
 		}
 	}
 	
-	public void align(int lower_border, int upper_border,int time_limit){
-	//	long start_time = System.currentTimeMillis();
-
-		//doAlign(start_time,time_limit)
+	public void alignUntilLight(int lower_border, int upper_border) {
 		
 		pilot.setTravelSpeed(10);
-		while(lightSensor.getLightValue()<55){
+		
+		while(lightSensor.getLightValue() < 55) {
 			int distance = sonicSensor.getDistance();
 
 			System.out.println(distance);
-			
-			
-
 			
 			// Good distance
 			if(lower_border < distance && upper_border > distance) {
@@ -69,8 +64,36 @@ public class Controls {
 			}
 			
 		}
-		
 }
+	
+	public void alignUntilDistance(int lower_border, int upper_border, int threshold) {
+		int distance = 999;
+		pilot.setTravelSpeed(10);
+		
+		while(distance < threshold) {
+			distance = sonicSensor.getDistance();
+
+			System.out.println(distance);
+			
+			// Good distance
+			if(lower_border < distance && upper_border > distance) {
+				pilot.forward();
+				continue;
+			}
+			
+			// Too far
+			if(lower_border >= distance) {
+				pilot.steer(-SOFT_STEER);
+				continue;
+			}
+						
+			// Too near
+			if(upper_border <= distance) {
+				pilot.steer(SOFT_STEER);
+				continue;
+			}
+		}
+	}
 	
 	public void setSuppressed(boolean suppressed) {
 
@@ -84,9 +107,8 @@ public class Controls {
 	
 	public boolean foundLine(){
 		boolean on_line = false;
-		if(lightSensor.getLightValue() > 50){
+		if(lightSensor.getLightValue() > 58){
 			System.out.println("gotlight");
-			Values.Instance().getPilot().stop();
 			on_line = true;
 		}
 			return on_line;
