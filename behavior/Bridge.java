@@ -57,7 +57,7 @@ public class Bridge implements Behavior {
 		Motor.B.rotate(-90);
 		DifferentialPilot pilot = Values.Instance().getPilot();
 		float distance = 0;
-		
+		pilot.setTravelSpeed(30);
 		leftCurve(1000/speedFactor);
 		while(dark()){ //nicht auf der Lichtkachel 
 			distance = us.getDistance();  //hole neuen wert vom sonar
@@ -70,12 +70,12 @@ public class Bridge implements Behavior {
 			}
 			
 				if(distance < treshold){
-					pilot.steer(20);
+					pilot.steer(50);
 					continue;
 			} if(distance >= treshold){
 					//Fall tritt wsh nie ein
 					pilot.stop();
-					pilot.rotate(-10);
+					pilot.rotate(-20);
 			continue;
 			} 
 			

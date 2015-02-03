@@ -145,6 +145,9 @@ public class Controls {
 	
 	public boolean foundLine(){
 		boolean on_line = false;
+		if(!lightSensor.isFloodlightOn()){
+			lightSensor.setFloodlight(true);
+		}
 
 		if(lightSensor.getLightValue() > 58){
 

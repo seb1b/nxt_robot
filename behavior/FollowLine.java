@@ -97,7 +97,7 @@ public class FollowLine implements Behavior {
         				
         				if(!pilot.isMoving()){
         					
-        					if(counter >5){
+        					if(counter >7){
 
         						end_reached = true;
         						break;

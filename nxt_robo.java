@@ -3,6 +3,7 @@ import behavior.Bootstrap;
 import behavior.Elevator;
 import behavior.FollowLine;
 import behavior.Bridge;
+import behavior.Gate;
 import behavior.Labyrinth;
 import behavior.PlankBridge;
 import behavior.StartPhase;
@@ -34,8 +35,8 @@ public class nxt_robo {
       Behavior b4 = new PlankBridge();
       Behavior b5 = new Labyrinth();
       Behavior b6 = new ReadBarcode();
-      
-     // Behavior b8 = new TurnTable();
+      Behavior b8 = new Gate();
+     // Behavior b9 = new TurnTable();
       
       
       Behavior b7 = new Bootstrap();
@@ -48,7 +49,7 @@ public class nxt_robo {
       Behavior b12  = new SpinningEncounter();*/
 
       //Behavior [] bArray = {b1};
-      Behavior [] bArray = {b0, b1, b2, b3, b4, b5, b6,b7};
+      Behavior [] bArray = {b0, b1, b2, b3, b4, b5, b6,b7,b8};
 
 
       Arbitrator arby = new Arbitrator(bArray);

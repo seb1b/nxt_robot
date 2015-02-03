@@ -22,11 +22,11 @@ public class Labyrinth implements Behavior {
 	DifferentialPilot pilot;
 	Controls control;
 	Values value;
-	private static int LOWER_BORDER = 10;
-	private static int UPPER_BORDER = 14;
-	private static int NO_WALL = 60;
-	private static int HARD_STEER = 75;
-	private static int SOFT_STEER = 40;
+	private static int LOWER_BORDER = 12;
+	private static int UPPER_BORDER = 15;
+	private static int NO_WALL = 45;
+	private static int HARD_STEER = 70;
+	private static int SOFT_STEER = 30;
 	TouchSensor touch_l;
 	TouchSensor touch_r;
 	
@@ -69,7 +69,7 @@ public class Labyrinth implements Behavior {
 				pilot.stop();
 				
 				pilot.backward();
-				Delay.msDelay(600);
+				Delay.msDelay(200);
 				pilot.rotate(-90);
 				
 				continue;
