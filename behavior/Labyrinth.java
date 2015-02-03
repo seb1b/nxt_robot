@@ -20,22 +20,22 @@ public class Labyrinth implements Behavior {
 	
 	UltrasonicSensor sonicSensor;
 	DifferentialPilot pilot;
-	private static int LOWER_BOARDER = 10;
-	private static int UPPER_BOARDER = 14;
+	Controls control;
+	private static int LOWER_BORDER = 10;
+	private static int UPPER_BORDER = 14;
 	private static int NO_WALL = 60;
 	private static int HARD_STEER = 75;
 	private static int SOFT_STEER = 40;
 	TouchSensor touch_l;
 	TouchSensor touch_r;
-	Controls control;
 	
 	
 	public Labyrinth() {
-		control = Controls.Instance();
 		sonicSensor = new UltrasonicSensor(SensorPort.S2);
 		touch_l = new TouchSensor(SensorPort.S1);
 		touch_r = new TouchSensor(SensorPort.S4);
 		pilot = new DifferentialPilot(1.3f, 3.94f, Motor.A, Motor.C, false); 
+		control = Controls.Instance();
 
 	}
 
@@ -49,41 +49,59 @@ public class Labyrinth implements Behavior {
 
 	public void action() {
 		System.out.println("S: Labyrinth");
+			
+		boolean contact = false;
+		boolean lineFound = false;
+		int distance = 9999;
 		
-		pilot.setTravelSpeed(7);
-		//long timeStart=System.currentTimeMillis();
-		while(!suppressed){
+		pilot.setTravelSpeed(10);
+		
+		while(!suppressed) {
+			contact = contact();
+			distance = sonicSensor.getDistance();
+			lineFound = control.foundLine();
+			System.out.println(distance);
+			pilot.setTravelSpeed(10);
 			
-			while(!control.line(pilot) && !contact() && LOWER_BOARDER < sonicSensor.getDistance() && UPPER_BOARDER > sonicSensor.getDistance()){
-				pilot.forward();
-				System.out.println("good Distance"+ sonicSensor.getDistance());
+			
+			if(contact) {
+				pilot.stop();
 				
-				
-			}
-			while(!control.line(pilot)&& !contact() && LOWER_BOARDER >=sonicSensor.getDistance()){
-				pilot.steer(-SOFT_STEER);
-				System.out.println("too close"+ sonicSensor.getDistance());
-			}
-			while(!control.line(pilot)&& !contact() && UPPER_BOARDER <= sonicSensor.getDistance()&&NO_WALL >= sonicSensor.getDistance()){
-				pilot.steer(SOFT_STEER);
-				System.out.println("too far"+ sonicSensor.getDistance());
-			}
-			
-			while(!control.line(pilot)&&!contact() && NO_WALL <= sonicSensor.getDistance()){
-				pilot.steer(HARD_STEER);
-			//	System.out.println("no wall"+ sonicSensor.getDistance());
-			}
-			
-			if(contact()){
-				//timeStart=System.currentTimeMillis();
-				//System.out.println("too far"+ sonicSensor.getDistance());
-				//pilot.quickStop();
 				pilot.backward();
-				Delay.msDelay(500);
-				pilot.rotate(-180);
-				System.out.println("touch");
+				Delay.msDelay(600);
+				pilot.rotate(-90);
+				
+				continue;
+			}
+				
+			if(lineFound) {
+				Values.Instance().setCallCodeReader(true);
+				suppressed = true;
+				continue;
 			}
 			
+			// Good distance
+			if(LOWER_BORDER < distance && UPPER_BORDER > distance) {
+				pilot.forward();
+				continue;
+			}
+			
+			// Too far
+			if(LOWER_BORDER >= distance) {
+				pilot.steer(-SOFT_STEER);
+				continue;
+			}
+						
+			// Too near
+			if(UPPER_BORDER <= distance && NO_WALL >= distance) {
+				pilot.steer(SOFT_STEER);
+				continue;
+			}
+			
+			if(NO_WALL <= distance)  {
+				pilot.steer(HARD_STEER);
+				continue;
+			}
 		}
 			
 	}

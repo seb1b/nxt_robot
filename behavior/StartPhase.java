@@ -1,4 +1,3 @@
-
 package behavior;
 
 
@@ -39,8 +38,7 @@ public class StartPhase implements Behavior {
 		control = Controls.Instance();
 		touch_l = new TouchSensor(SensorPort.S1);
 		touch_r = new TouchSensor(SensorPort.S4);
-		pilot = value.getPilot();
-		//pilot = new DifferentialPilot(1.3f, 3.94f, Motor.A, Motor.C, false); 
+		pilot = Values.Instance().getPilot(); 
 		pilot.setTravelSpeed(10);
 		//pilot.setRotateSpeed(50);
 
@@ -64,21 +62,21 @@ public class StartPhase implements Behavior {
 		boolean lineFound = false;
 		int distance = 9999;
 		
+		pilot.setTravelSpeed(10);
 		
-		//long timeStart=System.currentTimeMillis();
-	//	System.out.println("ROTATE"+pilot.getRotateSpeed());
-	//	Delay.msDelay(2000);
+	
 		if(!value.isStartphaseRunning()){
 			value.setStartphaseRunning(true);
-			int counter = 0;
+		
+		
 		while(!suppressed) {
-			//System.out.println(counter);
 			contact = contact();
 			distance = sonicSensor.getDistance();
-			lineFound = control.line(pilot);
+			lineFound = control.foundLine();
 			System.out.println(distance);
-			pilot.setTravelSpeed(10);
-			//counter++;
+			
+			
+			
 			if(contact) {
 				pilot.stop();
 				
@@ -90,6 +88,7 @@ public class StartPhase implements Behavior {
 			}
 				
 			if(lineFound) {
+				Values.Instance().setCallCodeReader(true);
 				suppressed = true;
 				continue;
 			}
@@ -116,12 +115,9 @@ public class StartPhase implements Behavior {
 				pilot.steer(HARD_STEER);
 				continue;
 			}
-			
 		}
-		}	
+	}	
 	}
-
-
 	
 
 		
