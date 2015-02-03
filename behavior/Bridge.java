@@ -1,17 +1,22 @@
 package behavior;
 
+import utils.Controls;
 import utils.Values;
 import lejos.util.*;
 import lejos.nxt.LightSensor;
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
+import lejos.nxt.TouchSensor;
 import lejos.nxt.UltrasonicSensor;
+import lejos.robotics.navigation.DifferentialPilot;
 import lejos.robotics.subsumption.Behavior;
 
 public class Bridge implements Behavior {
 	boolean suppressed = false;
 	LightSensor ls;
 	UltrasonicSensor us;
+	TouchSensor touch_l;
+	TouchSensor touch_r;
 	long zstVorher;
 	long zstNachher;
 	boolean rampe=false;
@@ -23,7 +28,19 @@ public class Bridge implements Behavior {
 	public Bridge(){
 		ls = new LightSensor(SensorPort.S3);
 		us = new UltrasonicSensor(SensorPort.S2);
+		touch_l = new TouchSensor(SensorPort.S1);
+		touch_r = new TouchSensor(SensorPort.S4);
 	}
+	
+	
+	public boolean getIsPressed(){
+		boolean isPressed = false;
+		if(touch_l.isPressed() || touch_r.isPressed()){
+			isPressed = true;
+		}
+		return isPressed;
+	}
+	
 	
 
 	public boolean takeControl() {
@@ -38,16 +55,38 @@ public class Bridge implements Behavior {
 		System.out.println("S: Bridge");
 		
 		Motor.B.rotate(-90);
+		DifferentialPilot pilot = Values.Instance().getPilot();
+		float distance = 0;
+		
 		leftCurve(1000/speedFactor);
-		while(dark()){			
-			while(us.getDistance() < treshold){
-				moveForward();
-			} while(us.getDistance() > treshold){
-				/*if(treshold>30){ //Rampe wurde hochgefahren. Nötig, um Spalt zu überfahren
-					treshold = 30;
-				}*/
-				moveRight();
+		while(dark()){ //nicht auf der Lichtkachel 
+			distance = us.getDistance();  //hole neuen wert vom sonar
+			
+			while(getIsPressed()){
+				pilot.stop();
+				
+				//				Motor.A.stop();
+//				Motor.C.stop();
 			}
+			
+				if(distance < treshold){
+					pilot.steer(20);
+					continue;
+			} if(distance >= treshold){
+					//Fall tritt wsh nie ein
+					pilot.stop();
+					pilot.rotate(-10);
+			continue;
+			} 
+			
+//			while(us.getDistance() < treshold && !getIsPressed()){
+//				moveForward();
+//			} while(us.getDistance() > treshold && !getIsPressed()){
+//				/*if(treshold>30){ //Rampe wurde hochgefahren. Nötig, um Spalt zu überfahren
+//					treshold = 30;
+//				}*/
+//				moveRight();
+//			}
 		}
 		suppress();
 	}
@@ -57,7 +96,7 @@ public class Bridge implements Behavior {
 		boolean dark = true;
 		ls.setFloodlight(false);
 		System.out.println(ls.getLightValue());
-		if(ls.getLightValue() >35 ){
+		if(ls.getLightValue() >50 ){
 			dark = false;
 			
 		}
