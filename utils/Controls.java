@@ -15,10 +15,15 @@ public class Controls {
 	public boolean found_line =false;
 	private static int SOFT_STEER = 40;
 	LightSensor lightSensor;
+	DifferentialPilot pilot;
+	private Values value;
 	
 	public Controls() {
 		sonicSensor = new UltrasonicSensor(SensorPort.S2);
 		lightSensor = new LightSensor(SensorPort.S3);
+		value = Values.Instance();
+		
+		
 	}
 	
 	public static Controls Instance() {
@@ -31,15 +36,17 @@ public class Controls {
 		}
 	}
 	
-	public void align(DifferentialPilot pilot, int lower_border, int upper_border,int time_limit){
-		long start_time = System.currentTimeMillis();
+	public void align(int lower_border, int upper_border,int time_limit){
+	//	long start_time = System.currentTimeMillis();
 
 		//doAlign(start_time,time_limit)
-		while(lightSensor.getLightValue()<50){
+		pilot = value.getPilot();
+		pilot.setTravelSpeed(10);
+		while(lightSensor.getLightValue()<55){
 			int distance = sonicSensor.getDistance();
 
 			System.out.println(distance);
-			pilot.setTravelSpeed(10);
+			
 			
 
 			
@@ -74,29 +81,6 @@ public class Controls {
 		return suppressed;
 	}
 
-	public void driveForward(int speed) {
-
-		Motor.A.setSpeed(speed);
-		Motor.C.setSpeed(speed);
-
-		Motor.A.forward();
-		Motor.C.forward();
-	}
-
-	public void driveBackward(int speed) {
-		
-		Motor.A.setSpeed(speed);
-		Motor.C.setSpeed(speed);
-
-		Motor.A.backward();
-		Motor.C.backward();
-	}
-
-	public void driveStop() {  
-		
-		Motor.A.stop();
-		Motor.C.stop();
-	}
 	
 	public boolean foundLine(){
 		boolean on_line = false;
