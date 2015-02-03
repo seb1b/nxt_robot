@@ -92,6 +92,7 @@ public class FollowLine implements Behavior {
         		}else{
         			pilot.stop();
         			while(!online()){
+        				
         				if(!pilot.isMoving()){
         					
         				if(counter %2 == 0){
@@ -101,9 +102,10 @@ public class FollowLine implements Behavior {
         					pilot.rotate(-10-(counter-1)*20,true);//right
         				}
         				
-        				
+        					pilot.travel(1);
         					counter++;
         				}
+        				
         				
         			}
         			

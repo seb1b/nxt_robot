@@ -21,6 +21,7 @@ public class Labyrinth implements Behavior {
 	UltrasonicSensor sonicSensor;
 	DifferentialPilot pilot;
 	Controls control;
+	Values value;
 	private static int LOWER_BORDER = 10;
 	private static int UPPER_BORDER = 14;
 	private static int NO_WALL = 60;
@@ -31,10 +32,11 @@ public class Labyrinth implements Behavior {
 	
 	
 	public Labyrinth() {
+		value = Values.Instance();
 		sonicSensor = new UltrasonicSensor(SensorPort.S2);
 		touch_l = new TouchSensor(SensorPort.S1);
 		touch_r = new TouchSensor(SensorPort.S4);
-		pilot = new DifferentialPilot(1.3f, 3.94f, Motor.A, Motor.C, false); 
+		pilot = value.getPilot();
 		control = Controls.Instance();
 
 	}
@@ -54,14 +56,13 @@ public class Labyrinth implements Behavior {
 		boolean lineFound = false;
 		int distance = 9999;
 		
-		pilot.setTravelSpeed(10);
+		pilot.setTravelSpeed(20);
 		
 		while(!suppressed) {
 			contact = contact();
 			distance = sonicSensor.getDistance();
 			lineFound = control.foundLine();
 			System.out.println(distance);
-			pilot.setTravelSpeed(10);
 			
 			
 			if(contact) {

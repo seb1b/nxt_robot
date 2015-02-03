@@ -16,13 +16,13 @@ public class Controls {
 	private static int SOFT_STEER = 40;
 	LightSensor lightSensor;
 	DifferentialPilot pilot;
-	private Values value;
+	//private Values value;
 	
 	public Controls() {
 		sonicSensor = new UltrasonicSensor(SensorPort.S2);
 		lightSensor = new LightSensor(SensorPort.S3);
-		value = Values.Instance();
-		
+		//value = Values.Instance();
+		pilot = Values.Instance().getPilot();
 		
 	}
 	
@@ -40,7 +40,7 @@ public class Controls {
 	//	long start_time = System.currentTimeMillis();
 
 		//doAlign(start_time,time_limit)
-		pilot = value.getPilot();
+		
 		pilot.setTravelSpeed(10);
 		while(lightSensor.getLightValue()<55){
 			int distance = sonicSensor.getDistance();
