@@ -149,6 +149,7 @@ boolean online(){
   		  	
 
   	public void suppress() {
+  		pilot.setTravelSpeed(30);
   		while(!online()){
   			pilot.forward();
   		}

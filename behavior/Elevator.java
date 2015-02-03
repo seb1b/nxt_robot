@@ -173,7 +173,7 @@ public class Elevator implements Behavior{
 				pilot.backward();
 				Delay.msDelay(700);
 				pilot.stop();
-				pilot.rotate(-60); 
+				pilot.rotate(-35); 
 				
 					//while(!touch_l.isPressed() || !touch_r.isPressed() ){
 					while(!touch_l.isPressed() && !touch_r.isPressed() ){

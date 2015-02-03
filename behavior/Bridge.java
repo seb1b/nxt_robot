@@ -23,7 +23,7 @@ public class Bridge implements Behavior {
 	
 	int speedFactor = 2; //2: Maximale Geschwindigkeit, 1: Halbe Geschwindigkeit
 	
-	private int treshold = 10;
+	private int treshold = 15;
 	
 	public Bridge(){
 		ls = new LightSensor(SensorPort.S3);
