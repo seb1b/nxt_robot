@@ -24,7 +24,6 @@ public class FollowLine implements Behavior {
 
 	private boolean suppressed = false;
 	private DifferentialPilot pilot;
-	//private PIDController pid;
 	private LightSensor detector;
 	int start_run = 0;
 	private Values value = Values.Instance();
@@ -57,11 +56,7 @@ public class FollowLine implements Behavior {
   	}
 
   	public void action() {
-  		
-  	  //System.out.println("S: Follow Line");
-    
-        //	suppress();
-       
+     
 		boolean ON_LINE = true;
 		
 		//boolean LINE_RIGHT = false;
@@ -71,11 +66,12 @@ public class FollowLine implements Behavior {
 		int factor = 10;
        while (!suppressed) {
     	   if(start_run == 0){
-       		System.out.println("looking for line");
+       		
        		pilot.setTravelSpeed(12);
        		while(dark()){
-       			
+       			System.out.println("dark0");
        			pilot.forward();
+       			System.out.println("dark1");
        		}
        		
        			pilot.stop();
@@ -84,10 +80,6 @@ public class FollowLine implements Behavior {
        		}
 
 
-        		
-        		//value = detector.getLightValue();
-
-        		//System.out.println(value);
    		
         		if(online()){
         			pilot.forward();
@@ -118,7 +110,7 @@ public class FollowLine implements Behavior {
 						System.out.println("end reached");
 						pilot.rotate((10+(counter-1)*factor)/2);
 						pilot.stop();
-        				suppress();
+        				//suppress();
         			}
        			
         		}    		
@@ -136,8 +128,9 @@ boolean online(){
 private boolean dark(){
 	
 	boolean dark = true;
+	detector.setFloodlight(true);
 	System.out.println(detector.getLightValue());
-	if(detector.getLightValue() >50 ){
+	if(detector.getLightValue() >55 ){
 		dark = false;
 		
 	}
@@ -146,7 +139,7 @@ private boolean dark(){
 
   		  	
 
-  	public void suppress() {
+ public void suppress() {
   		System.out.println("suppressed follow line");
   		pilot.setTravelSpeed(30);
   		while(!online()){

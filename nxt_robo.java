@@ -33,7 +33,6 @@ public class nxt_robo {
 
       Behavior b2 = new Bridge();
   	  Elevator b3 = new Elevator();
-      //Behavior b4 = new PlankBridge();
       Behavior b4 = new Labyrinth();
       Behavior b5 = new ReadBarcode();
       Behavior b6 = new Gate();

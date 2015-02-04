@@ -28,17 +28,17 @@ public class StartPhase implements Behavior {
 	private static int SOFT_STEER = 45;
 	TouchSensor touch_l;
 	TouchSensor touch_r;
-	Controls control;
+	private LightSensor ls;
 
 	private Values value = Values.Instance();
 	
 	public StartPhase() {
 
 		sonicSensor = new UltrasonicSensor(SensorPort.S2);
-		control = Controls.Instance();
 		touch_l = new TouchSensor(SensorPort.S1);
 		touch_r = new TouchSensor(SensorPort.S4);
-		pilot = Values.Instance().getPilot(); 
+		pilot = Values.Instance().getPilot();
+		ls = new LightSensor(SensorPort.S3);
 		//pilot.setTravelSpeed(30);
 		//pilot.setRotateSpeed(50);
 
@@ -72,7 +72,7 @@ public class StartPhase implements Behavior {
 		while(!suppressed) {
 			contact = contact();
 			distance = sonicSensor.getDistance();
-			lineFound = control.foundLine();
+			lineFound = foundLine();
 			//System.out.println(distance);
 			
 			
@@ -137,8 +137,20 @@ public class StartPhase implements Behavior {
 	public void suppress() {
 		value.incScenario();
 		System.out.println("suppress start phase");
-		//suppressed = true;
+		suppressed = true;
 	}
 
+	
+	private boolean foundLine(){
+		boolean on_line = false;
+
+		if(ls.getLightValue() > 58){
+
+			System.out.println("gotlight");
+			on_line = true;
+		}
+			return on_line;
+		
+	}
 
 }
