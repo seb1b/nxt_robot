@@ -24,12 +24,15 @@ public class Bridge implements Behavior {
 	int speedFactor = 2; //2: Maximale Geschwindigkeit, 1: Halbe Geschwindigkeit
 	
 	private int treshold = 15;
+	private DifferentialPilot pilot;
+	
 	
 	public Bridge(){
 		ls = new LightSensor(SensorPort.S3);
 		us = new UltrasonicSensor(SensorPort.S2);
 		touch_l = new TouchSensor(SensorPort.S1);
 		touch_r = new TouchSensor(SensorPort.S4);
+		pilot = Values.Instance().getPilot();
 	}
 	
 	
@@ -55,10 +58,9 @@ public class Bridge implements Behavior {
 		System.out.println("S: Bridge");
 		
 		Motor.B.rotate(-90);
-		DifferentialPilot pilot = Values.Instance().getPilot();
+		
 		float distance = 0;
 		pilot.setTravelSpeed(30);
-		leftCurve(1000/speedFactor);
 		while(dark()){ //nicht auf der Lichtkachel 
 			distance = us.getDistance();  //hole neuen wert vom sonar
 			
@@ -103,30 +105,6 @@ public class Bridge implements Behavior {
 		return dark;
 	}
 	
-	public void leftCurve(long delay){
-		Motor.C.setSpeed(400*speedFactor);
-		Motor.C.forward();
-		Motor.A.setSpeed(100*speedFactor);
-		Motor.A.forward();
-		Delay.msDelay(delay);
-		
-	}
-	
-
-	
-	
-	public void moveForward(){
-		Motor.C.setSpeed(500);
-		Motor.C.forward();
-		Motor.A.setSpeed(300);
-		Motor.A.forward();
-	}
-	
-	public void moveRight(){
-		Motor.C.backward();
-		//Motor.A.setSpeed(300);
-		Motor.A.forward();
-	}
 	
 		
 	
@@ -134,8 +112,7 @@ public class Bridge implements Behavior {
 	public void suppress() {
 		System.out.println("S: bridge done");
 		Values.Instance().incScenario();
-		Motor.A.setSpeed(0);
-		Motor.C.setSpeed(0);
+		pilot.stop();
   		suppressed = true;
 
 	}

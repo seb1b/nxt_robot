@@ -3,6 +3,7 @@ import behavior.Bootstrap;
 import behavior.Elevator;
 import behavior.FollowLine;
 import behavior.Bridge;
+import behavior.FollowLine2ndPart;
 import behavior.Gate;
 import behavior.Labyrinth;
 import behavior.PlankBridge;
@@ -36,7 +37,8 @@ public class nxt_robo {
       Behavior b5 = new Labyrinth();
       Behavior b6 = new ReadBarcode();
       Behavior b8 = new Gate();
-     // Behavior b9 = new TurnTable();
+      Behavior b9 = new FollowLine2ndPart();
+      Behavior b10 = new TurnTable();
       
       
       Behavior b7 = new Bootstrap();

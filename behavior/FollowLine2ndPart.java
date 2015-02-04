@@ -20,7 +20,7 @@ import lejos.util.PIDController;
 
 
 
-public class FollowLine implements Behavior {
+public class FollowLine2ndPart implements Behavior {
 
 	private boolean suppressed = false;
 	private DifferentialPilot pilot;
@@ -33,7 +33,7 @@ public class FollowLine implements Behavior {
 	UltrasonicSensor sonicSensor;
 	Controls control;
 	
-	public FollowLine() {
+	public FollowLine2ndPart() {
 		
 		System.out.println("S: construct done");
 	      //pilot = new DifferentialPilot(1.3f, 3.94f, Motor.A, Motor.C, false); 
@@ -50,8 +50,7 @@ public class FollowLine implements Behavior {
     public boolean takeControl() {
 
     	
-  		if(value.getScenario() == 1){
-  			//System.out.println(" foloow line"+value.getScenario());
+  		if(value.getScenario() == 8){
   			return true;
   		}else{
   			return false;
@@ -71,56 +70,76 @@ public class FollowLine implements Behavior {
 		int value = 0;
 		boolean end_reached = false;
 		int factor = 10;
+		boolean ramp_reached  = false;
        while (!suppressed) {
-    	   if(start_run == 0){
+    	  /*if(start_run == 0 || end_reached){
        		System.out.println("looking for line");
        		control.alignUntilLight(20, 22,60);
        		Delay.msDelay(1500);
        		pilot.setTravelSpeed(15);
     			start_run = 1;
     			 
-       		}
+       		}*/
 
 
         		
         		value = detector.getLightValue();
 
         		System.out.println(value);
-   		
+
+        		
         		if(online()){
         			pilot.forward();
         			counter = 1;
         		}else{
         			pilot.stop();
-        			while(!online()){        				
-        				if(!pilot.isMoving()){        					
+        			while(!online()){
+        				
+        				if(!pilot.isMoving()){
+        					
         					if(counter >7){
+
         						end_reached = true;
         						break;
         					}
         					if(counter > 2){
-        						factor = 25;
+        						factor = 20;
         					}
         					
         					if(counter %2 == 0){
         						pilot.travel(1);
-        						pilot.rotate(5+(counter-1)*factor,true); //left    					
-        					}else{       						
-        						pilot.rotate(-5-(counter-1)*factor,true);//right
-        					}        					
+        						pilot.rotate(10+(counter-1)*factor,true); //left    					
+        					}else{
+        						
+        						pilot.rotate(-10-(counter-1)*factor,true);//right
+
+        					}
+        				
+        					
         						counter++;
-        				}       				
+        				}
+        				
+        				
         			}
         			
         			if(end_reached){
 						System.out.println("end reached");
 						pilot.rotate((10+(counter-1)*factor)/2);
+
+						if(ramp_reached){
+							suppress();
+						}
+						pilot.forward();
+						Delay.msDelay(1000);
 						pilot.stop();
-        				suppress();
+						ramp_reached = true;			
         			}
-       			
-        		}    		
-        	}   		
+        			
+        			
+        		}
+        		
+        		
+        	}      		
 }
 
   			
