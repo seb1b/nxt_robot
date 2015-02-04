@@ -35,7 +35,6 @@ public class FollowLine2ndPart implements Behavior {
 	private boolean final_part = false;
 	public FollowLine2ndPart() {
 		
-		System.out.println("S: construct done");
 	      //pilot = new DifferentialPilot(1.3f, 3.94f, Motor.A, Motor.C, false); 
 		  pilot = value.getPilot();
 	      pilot.setTravelSpeed(15);
@@ -47,7 +46,13 @@ public class FollowLine2ndPart implements Behavior {
 	      
 	}
 
-	
+	public boolean getIsPressed(){
+		boolean isPressed = false;
+		if(touch_l.isPressed() || touch_r.isPressed()){
+			isPressed = true;
+		}
+		return isPressed;
+	}
       
     public boolean takeControl() {
 
@@ -78,6 +83,7 @@ public class FollowLine2ndPart implements Behavior {
 		boolean end_reached = false;
 		int factor = 10;
 		boolean ramp_reached  = false;
+		
        while (!suppressed) {
     	  /*if(start_run == 0 || end_reached){
        		System.out.println("looking for line");
@@ -152,12 +158,10 @@ public class FollowLine2ndPart implements Behavior {
         			
         		}
         		
-        		
         	}      		
 }
 
   			
-
 
 boolean online(){
 	return detector.getLightValue()>55;
@@ -174,6 +178,4 @@ boolean online(){
     	value.incScenario();
   		suppressed = true;
   	}
-}
-
- 
+} 

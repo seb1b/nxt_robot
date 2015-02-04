@@ -58,7 +58,7 @@ public class Gate  implements Behavior {
 		
 		System.out.println("S: Calling Gate");
 		
-		controls.alignForTime(12, 14, 3700, 15);
+		controls.alignForTime(12, 14, 3600, 15);
 		pilot.stop();
 		
 		// Wait for connection
@@ -71,6 +71,7 @@ public class Gate  implements Behavior {
 		// Robot drives through the gate
 		System.out.println("Driving through.");
 
+		Delay.msDelay(600);
 		pilot.forward();
 		pilot.setTravelSpeed((int) Math.floor(pilot.getMaxTravelSpeed()));
 		Delay.msDelay(4200);
@@ -112,21 +113,21 @@ public class Gate  implements Behavior {
 		System.out.println("Received: " + success);
 		
 		
-		System.out.println("beforealign");
+		//System.out.println("beforealign");
 		//controls.alignUntilDistance(12, 14, 90, 12);
 		controls.alignForTime(12, 14, 5000, 15);
-		System.out.println("afteralign");
+		//System.out.println("afteralign");
 		
 		pilot.stop();
-		pilot.rotate(-1);
+		pilot.rotate(3);
 		
 		//System.out.println("forward 1000");
 		
 		pilot.forward();
-		Delay.msDelay(3000); // 12000
+		pilot.setTravelSpeed(18);
+		Delay.msDelay(8000); // 12000
 		
-		
-		System.out.println("incscenario");
+		//System.out.println("incscenario");
 
 		values.incScenario();
 
