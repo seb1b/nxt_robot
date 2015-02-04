@@ -33,15 +33,15 @@ public class nxt_robo {
 
       Behavior b2 = new Bridge();
   	  Elevator b3 = new Elevator();
-      Behavior b4 = new PlankBridge();
-      Behavior b5 = new Labyrinth();
-      Behavior b6 = new ReadBarcode();
-      Behavior b8 = new Gate();
-      Behavior b9 = new FollowLine2ndPart();
-      Behavior b10 = new TurnTable();
+      //Behavior b4 = new PlankBridge();
+      Behavior b4 = new Labyrinth();
+      Behavior b5 = new ReadBarcode();
+      Behavior b6 = new Gate();
+      Behavior b7 = new FollowLine2ndPart();
+      Behavior b8 = new TurnTable();
       
       
-      Behavior b7 = new Bootstrap();
+      Behavior b9 = new Bootstrap();
 
       
      /* Behavior b3 = new FollowLine();
@@ -51,7 +51,7 @@ public class nxt_robo {
       Behavior b12  = new SpinningEncounter();*/
 
       //Behavior [] bArray = {b1};
-      Behavior [] bArray = {b0, b1, b2, b3, b4, b5, b6,b7,b8,b9,b10};
+      Behavior [] bArray = {b0, b1, b2, b3, b4, b5, b6,b7,b8,b9};
 
 
       Arbitrator arby = new Arbitrator(bArray);

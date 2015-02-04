@@ -43,7 +43,7 @@ public class Labyrinth implements Behavior {
 
 	public boolean takeControl() {
 
-		if(Values.Instance().getScenario() == 5){
+		if(Values.Instance().getScenario() == 4){
 			return true;
 		}
 		return false;

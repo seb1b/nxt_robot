@@ -38,12 +38,13 @@ public class Controls {
 	
 	public void alignUntilLight(int lower_border, int upper_border, int light_value) {
 		
-		pilot.setTravelSpeed(20);
+		pilot.setTravelSpeed(15);
+		lightSensor.setFloodlight(true);
 		
 		while(lightSensor.getLightValue() < light_value) {
 			int distance = sonicSensor.getDistance();
 
-			System.out.println(distance);
+			//System.out.println(distance);
 			
 			// Good distance
 			if(lower_border < distance && upper_border > distance) {
@@ -64,6 +65,7 @@ public class Controls {
 			}
 			
 		}
+		pilot.stop();
 }
 	
 

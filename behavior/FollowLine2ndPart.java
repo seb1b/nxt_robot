@@ -32,7 +32,7 @@ public class FollowLine2ndPart implements Behavior {
 	TouchSensor touch_r;
 	UltrasonicSensor sonicSensor;
 	Controls control;
-	
+	private boolean final_part = false;
 	public FollowLine2ndPart() {
 		
 		System.out.println("S: construct done");
@@ -52,7 +52,12 @@ public class FollowLine2ndPart implements Behavior {
     public boolean takeControl() {
 
     	
-  		if(value.getScenario() == 8){
+  		if(value.getScenario() == 6) {
+  			suppressed =false;
+  			return true;
+  		}else if(value.getScenario() == 8){
+  			final_part = true;
+  			suppressed =false;
   			return true;
   		}else{
   			return false;
@@ -108,11 +113,11 @@ public class FollowLine2ndPart implements Behavior {
         						end_reached = true;
         						break;
         					}
-        					if(counter > 2){
+        					if(counter > 3){
         						factor = 25;
         					}
         					
-        					if(counter %3 == 0){
+        					if(counter %2 == 0){
         						pilot.travel(1);
         						pilot.rotate(10+(counter-1)*factor,true); //left    					
         					}else{

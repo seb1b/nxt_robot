@@ -73,7 +73,7 @@ public class StartPhase implements Behavior {
 			contact = contact();
 			distance = sonicSensor.getDistance();
 			lineFound = control.foundLine();
-			System.out.println(distance);
+			//System.out.println(distance);
 			
 			
 			
@@ -88,10 +88,14 @@ public class StartPhase implements Behavior {
 			}
 				
 			if(lineFound) {
-				Values.Instance().setCallCodeReader(true);
+				//Values.Instance().setCallCodeReader(true);
+				pilot.forward();
+				Delay.msDelay(700);
+				
 				pilot.stop();
 				suppressed = true;
-				continue;
+				suppress();
+				//continue;
 			}
 			
 			// Good distance
@@ -131,8 +135,9 @@ public class StartPhase implements Behavior {
 	
 
 	public void suppress() {
+		value.incScenario();
 		System.out.println("suppress start phase");
-		suppressed = true;
+		//suppressed = true;
 	}
 
 

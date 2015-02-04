@@ -92,14 +92,6 @@ public class Elevator implements Behavior{
 			}
 			*/
     
-    public void rotateRight(int degrees){
-    	Motor.C.rotate(degrees);
-    	Motor.A.setSpeed(200);
-    	Motor.C.setSpeed(200);
-    	Delay.msDelay(200);
-
-    	
-    }
     
     /*
     public static void main(String[] args){
@@ -151,12 +143,17 @@ public class Elevator implements Behavior{
 				pilot.backward();
 				Delay.msDelay(300);
 				pilot.stop();
-				pilot.rotate(-30); 
+				pilot.rotate(-40); 
 				
 					//while(!touch_l.isPressed() || !touch_r.isPressed() ){ && !touch_r.isPressed() 
 					while(!touch_l.isPressed()){
 						System.out.println("auf gehts");
-						
+						if(touch_r.isPressed()){
+							pilot.stop();
+							pilot.backward();
+							Delay.msDelay(100);
+							pilot.rotate(10);
+						}
 
 						if(us.getDistance() > 5){	
 							//zu weit we, also bewege dich nach links
@@ -171,12 +168,7 @@ public class Elevator implements Behavior{
 							System.out.println("Distanz: " + us.getDistance() );
 						continue;
 						} 
-						if(touch_r.isPressed()){
-							pilot.stop();
-							pilot.backward();
-							Delay.msDelay(100);
-							pilot.rotate(10);
-						}
+						
 	}
 			
 					/*im aufzug*/

@@ -31,16 +31,14 @@ public class FollowLine implements Behavior {
 	TouchSensor touch_l;
 	TouchSensor touch_r;
 	UltrasonicSensor sonicSensor;
-	Controls control;
+	//Controls control;
 	
 	public FollowLine() {
 		
 		System.out.println("S: construct done");
-	      //pilot = new DifferentialPilot(1.3f, 3.94f, Motor.A, Motor.C, false); 
 		  pilot = value.getPilot();
 	      pilot.setTravelSpeed(12);
-	     // pilot.setRotateSpeed(70);
-	      control = new Controls();
+
 	      detector = new LightSensor(SensorPort.S3);
 	      
 	}
@@ -74,18 +72,22 @@ public class FollowLine implements Behavior {
        while (!suppressed) {
     	   if(start_run == 0){
        		System.out.println("looking for line");
-       		control.alignUntilLight(20, 22,60);
-       		Delay.msDelay(1500);
-       		pilot.setTravelSpeed(15);
+       		pilot.setTravelSpeed(12);
+       		while(dark()){
+       			
+       			pilot.forward();
+       		}
+       		
+       			pilot.stop();
     			start_run = 1;
     			 
        		}
 
 
         		
-        		value = detector.getLightValue();
+        		//value = detector.getLightValue();
 
-        		System.out.println(value);
+        		//System.out.println(value);
    		
         		if(online()){
         			pilot.forward();
@@ -104,9 +106,9 @@ public class FollowLine implements Behavior {
         					
         					if(counter %2 == 0){
         						pilot.travel(1);
-        						pilot.rotate(5+(counter-1)*factor,true); //left    					
+        						pilot.rotate(7+(counter-1)*factor,true); //left    					
         					}else{       						
-        						pilot.rotate(-5-(counter-1)*factor,true);//right
+        						pilot.rotate(-7-(counter-1)*factor,true);//right
         					}        					
         						counter++;
         				}       				
@@ -130,9 +132,22 @@ boolean online(){
 	return detector.getLightValue()>55;
 	
 }
+
+private boolean dark(){
+	
+	boolean dark = true;
+	System.out.println(detector.getLightValue());
+	if(detector.getLightValue() >50 ){
+		dark = false;
+		
+	}
+	return dark;
+}
+
   		  	
 
   	public void suppress() {
+  		System.out.println("suppressed follow line");
   		pilot.setTravelSpeed(30);
   		while(!online()){
   			pilot.forward();

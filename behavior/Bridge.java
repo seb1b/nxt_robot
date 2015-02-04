@@ -72,12 +72,12 @@ public class Bridge implements Behavior {
 			}
 			
 				if(distance < treshold){
-					pilot.steer(50);
+					pilot.steer(55);
 					continue;
 			} if(distance >= treshold){
 					//Fall tritt wsh nie ein
 					pilot.stop();
-					pilot.rotate(-20);
+					pilot.rotate(-30);
 			continue;
 			} 
 			
@@ -97,7 +97,7 @@ public class Bridge implements Behavior {
 		
 		boolean dark = true;
 		ls.setFloodlight(false);
-		System.out.println(ls.getLightValue());
+		//System.out.println(ls.getLightValue());
 		if(ls.getLightValue() >50 ){
 			dark = false;
 			

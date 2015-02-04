@@ -45,7 +45,7 @@ public class Gate  implements Behavior {
 
 	@Override
 	public boolean takeControl() {
-		if(Values.Instance().getScenario() == 6){
+		if(Values.Instance().getScenario() == 5){
 			return true;
 		}
 		return false;
