@@ -51,7 +51,7 @@ public class nxt_robo {
       Behavior b12  = new SpinningEncounter();*/
 
       //Behavior [] bArray = {b1};
-      Behavior [] bArray = {b0, b1, b2, b3, b4, b5, b6,b7,b8};
+      Behavior [] bArray = {b0, b1, b2, b3, b4, b5, b6,b7,b8,b9,b10};
 
 
       Arbitrator arby = new Arbitrator(bArray);
