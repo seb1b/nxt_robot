@@ -157,9 +157,9 @@ public class FollowLine implements Behavior {
         			
         			if(end_reached){
         				if(lastTurnDirection ==1){
-        					pilot.rotate((60+(counter-1)*factor)/2 + 5);
+        					pilot.rotate((60+(counter-1)*factor)/2 - 10);
         				}else{
-        					pilot.rotate((-60-(counter-1)*factor)/2 -5);
+        					pilot.rotate((-60-(counter-1)*factor)/2 + 10);
         					
         				}
 						//System.out.println("end reached");

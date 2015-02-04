@@ -91,7 +91,7 @@ public class TurnTable implements Behavior{
 			assertCommand(command, TurnTableCommand.DONE);
 			
 			pilot.backward();
-			Delay.msDelay(2000);
+			Delay.msDelay(1800);
 			pilot.stop();
 			
 		

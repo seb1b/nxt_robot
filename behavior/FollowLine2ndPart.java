@@ -122,6 +122,8 @@ public class FollowLine2ndPart implements Behavior {
        			{continue;}	*/   		//letzte wahr fehlmessung
        			while(!online()){ 
        				justTurned=true;
+       				
+       				if(!ramp_reached){
        				//if(!pilot.isMoving()){        					
        					if(counter >5){
        						end_reached = true;
@@ -159,20 +161,60 @@ public class FollowLine2ndPart implements Behavior {
        						}
        					}        					
        					counter++;
+       				}else{
+       					if(counter >2 ||getIsPressed()){
+       						end_reached = true;
+       						break;
+       					}
+       					//if(counter > 3){
+       					//	factor = 30;
+       					//}
+       					
+       					if(ThisTurnDirection==2){
+    
+       						lastTurnDirection=2;
+       						ThisTurnDirection=1;
+       						if(counter>3)
+       							pilot.travel(1);	//	only move forward if value is high enough
+       						pilot.rotate(60+(counter-1)*factor,true); //left  
+       						while(pilot.isMoving()){
+       							if(online()){
+       								
+       								
+       								break;
+       								
+       							}
+       						}
        						
+       						
+       					}else{       			
+       						lastTurnDirection=1;
+       						ThisTurnDirection=2;
+       						pilot.rotate(-60-(counter-1)*factor,true);//right
+       						while(pilot.isMoving()){
+       							if(online()){					
+       								break;       								
+       							}
+       						}
+       					}        					
+       					counter++;
+       					
+       					
+       					
+       				}	
        				//}       				
        			}
         			
         			if(end_reached){
 						System.out.println("end reached");
 						if(lastTurnDirection ==1){
-        					pilot.rotate((60+(counter-1)*factor)/2 + 5);
+        					pilot.rotate((60+(counter-1)*factor)/2 - 10);
         				}else{
-        					pilot.rotate((-60-(counter-1)*factor)/2 -5);
+        					pilot.rotate((-60-(counter-1)*factor)/2 + 10);
         					
         				}
 
-						if(ramp_reached){
+						if(ramp_reached||final_part){
 							suppress();
 						}else{
 							pilot.forward();
