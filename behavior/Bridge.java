@@ -72,12 +72,12 @@ public class Bridge implements Behavior {
 			}
 			
 				if(distance < treshold){
-					pilot.steer(55);
+					pilot.steer(60);
 					continue;
 			} if(distance >= treshold){
 					//Fall tritt wsh nie ein
 					pilot.stop();
-					pilot.rotate(-30);
+					pilot.rotate(-35);
 			continue;
 			} 
 			

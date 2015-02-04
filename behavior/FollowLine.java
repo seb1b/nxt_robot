@@ -38,7 +38,7 @@ public class FollowLine implements Behavior {
 		  value = Values.Instance();
 		  pilot = value.getPilot();
 	      pilot.setTravelSpeed(20);
-	      pilot.setRotateSpeed(60);
+	      pilot.setRotateSpeed(70);
 	      
 	      touch_l = new TouchSensor(SensorPort.S1);
 			touch_r = new TouchSensor(SensorPort.S4);
@@ -105,7 +105,7 @@ public class FollowLine implements Behavior {
         		}else{
         			not_online_counter++;
         			System.out.println("counter ist bei " + not_online_counter);
-        			if(not_online_counter >10)
+        			if(not_online_counter >5)
         			/*if(!online()){		//zweiter check um wirklich von der linie weg zu sein
         			pilot.stop();
         			System.out.println("wirklich gestopped");
@@ -115,7 +115,7 @@ public class FollowLine implements Behavior {
         			while(!online()){ 
         				justTurned=true;
         				//if(!pilot.isMoving()){        					
-        					if(counter >6){
+        					if(counter >5){
         						end_reached = true;
         						break;
         					}
@@ -156,8 +156,14 @@ public class FollowLine implements Behavior {
         			}
         			
         			if(end_reached){
+        				if(lastTurnDirection ==1){
+        					pilot.rotate((60+(counter-1)*factor)/2 + 5);
+        				}else{
+        					pilot.rotate((-60-(counter-1)*factor)/2 -5);
+        					
+        				}
 						//System.out.println("end reached");
-						pilot.rotate((10+(counter-1)*factor)/2);
+						
 						pilot.stop();
 				    	value.incScenario();
         				suppress();

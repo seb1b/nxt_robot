@@ -55,7 +55,7 @@ public class Labyrinth implements Behavior {
 		boolean contact = false;
 		int distance = 9999;
 		
-		pilot.setTravelSpeed(20);
+		pilot.setTravelSpeed(30);
 		
 		while(!suppressed) {
 			contact = contact();

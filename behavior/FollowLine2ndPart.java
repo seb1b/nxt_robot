@@ -33,6 +33,9 @@ public class FollowLine2ndPart implements Behavior {
 	UltrasonicSensor sonicSensor;
 	Controls control;
 	private boolean final_part = false;
+	private boolean justTurned=false;
+	private int lastTurnDirection=1;
+	
 	public FollowLine2ndPart() {
 		
 	      //pilot = new DifferentialPilot(1.3f, 3.94f, Motor.A, Motor.C, false); 
@@ -79,69 +82,95 @@ public class FollowLine2ndPart implements Behavior {
 		
 		//boolean LINE_RIGHT = false;
 		int counter = 1;
-		int value = 0;
+		//int value = 0;
 		boolean end_reached = false;
-		int factor = 10;
 		boolean ramp_reached  = false;
+		int factor = 30;
+		int not_online_counter = 0;
+		int ThisTurnDirection=1;
 		
        while (!suppressed) {
-    	  /*if(start_run == 0 || end_reached){
-       		System.out.println("looking for line");
-       		control.alignUntilLight(20, 22,60);
-       		Delay.msDelay(1500);
-       		pilot.setTravelSpeed(15);
-    			start_run = 1;
-    			 
-       		}*/
+    	  
 
 
         		
-        		value = detector.getLightValue();
+    	   while(getIsPressed()){
+				pilot.stop();
+   	   }
 
-        		System.out.println(value);
-
-        		
-        		if(online()){
-        			pilot.forward();
-        			counter = 1;
-        		}else{
-        			pilot.stop();
-        			while(!online()){
-        				
-        				if(!pilot.isMoving()){
-        					if(ramp_reached && (touch_l.isPressed() || touch_r.isPressed())){
-        						end_reached = true;
-        						break;
-        					}
-        					
-        					if(counter >7){
-
-        						end_reached = true;
-        						break;
-        					}
-        					if(counter > 3){
-        						factor = 25;
-        					}
-        					
-        					if(counter %2 == 0){
-        						pilot.travel(1);
-        						pilot.rotate(10+(counter-1)*factor,true); //left    					
-        					}else{
-        						
-        						pilot.rotate(-10-(counter-1)*factor,true);//right
-
-        					}
-        				
-        					
-        						counter++;
-        				}
-        				
-        				
-        			}
+  		
+       		if(online()){
+       			if(justTurned){
+       				justTurned=false;
+       				Delay.msDelay(10);//kleines delay um wirklich in die linie hinein zu schwenken
+       				pilot.stop();
+       				
+       			}
+       			pilot.forward();
+       			counter = 0;
+       			ThisTurnDirection=lastTurnDirection;
+       			not_online_counter = 0;
+       		}else{
+       			not_online_counter++;
+       			System.out.println("counter ist bei " + not_online_counter);
+       			if(not_online_counter >5)
+       			/*if(!online()){		//zweiter check um wirklich von der linie weg zu sein
+       			pilot.stop();
+       			System.out.println("wirklich gestopped");
+       			}		// wir sind wirklich weg
+       			else
+       			{continue;}	*/   		//letzte wahr fehlmessung
+       			while(!online()){ 
+       				justTurned=true;
+       				//if(!pilot.isMoving()){        					
+       					if(counter >5){
+       						end_reached = true;
+       						break;
+       					}
+       					//if(counter > 3){
+       					//	factor = 30;
+       					//}
+       					
+       					if(ThisTurnDirection==2){
+    
+       						lastTurnDirection=2;
+       						ThisTurnDirection=1;
+       						if(counter>3)
+       							pilot.travel(1);	//	only move forward if value is high enough
+       						pilot.rotate(60+(counter-1)*factor,true); //left  
+       						while(pilot.isMoving()){
+       							if(online()){
+       								
+       								
+       								break;
+       								
+       							}
+       						}
+       						
+       						
+       					}else{       			
+       						lastTurnDirection=1;
+       						ThisTurnDirection=2;
+       						pilot.rotate(-60-(counter-1)*factor,true);//right
+       						while(pilot.isMoving()){
+       							if(online()){					
+       								break;       								
+       							}
+       						}
+       					}        					
+       					counter++;
+       						
+       				//}       				
+       			}
         			
         			if(end_reached){
 						System.out.println("end reached");
-						pilot.rotate((10+(counter-1)*factor)/2);
+						if(lastTurnDirection ==1){
+        					pilot.rotate((60+(counter-1)*factor)/2 + 5);
+        				}else{
+        					pilot.rotate((-60-(counter-1)*factor)/2 -5);
+        					
+        				}
 
 						if(ramp_reached){
 							suppress();
