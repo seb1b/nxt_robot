@@ -38,8 +38,10 @@ public class FollowLine2ndPart implements Behavior {
 		System.out.println("S: construct done");
 	      //pilot = new DifferentialPilot(1.3f, 3.94f, Motor.A, Motor.C, false); 
 		  pilot = value.getPilot();
-	      pilot.setTravelSpeed(12);
+	      pilot.setTravelSpeed(15);
 	     // pilot.setRotateSpeed(70);
+			touch_l = new TouchSensor(SensorPort.S1);
+			touch_r = new TouchSensor(SensorPort.S4);
 	      control = new Controls();
 	      detector = new LightSensor(SensorPort.S3);
 	      
@@ -96,6 +98,10 @@ public class FollowLine2ndPart implements Behavior {
         			while(!online()){
         				
         				if(!pilot.isMoving()){
+        					if(ramp_reached && (touch_l.isPressed() || touch_r.isPressed())){
+        						end_reached = true;
+        						break;
+        					}
         					
         					if(counter >7){
 
@@ -103,10 +109,10 @@ public class FollowLine2ndPart implements Behavior {
         						break;
         					}
         					if(counter > 2){
-        						factor = 20;
+        						factor = 25;
         					}
         					
-        					if(counter %2 == 0){
+        					if(counter %3 == 0){
         						pilot.travel(1);
         						pilot.rotate(10+(counter-1)*factor,true); //left    					
         					}else{
@@ -128,11 +134,14 @@ public class FollowLine2ndPart implements Behavior {
 
 						if(ramp_reached){
 							suppress();
+						}else{
+							pilot.forward();
+							Delay.msDelay(4000);
+							pilot.stop();
+							counter = 1;
+							end_reached = false;
+							ramp_reached = true;
 						}
-						pilot.forward();
-						Delay.msDelay(1000);
-						pilot.stop();
-						ramp_reached = true;			
         			}
         			
         			
@@ -152,15 +161,9 @@ boolean online(){
   		  	
 
   	public void suppress() {
-  		pilot.setTravelSpeed(30);
-  		while(!online()){
-  			pilot.forward();
-  		}
-  		
-  		detector.setFloodlight(false);
-  		Delay.msDelay(2000);
+
   		pilot.stop();
-  		//System.out.println("looking for distance");
+  		System.out.println("looking for distance");
     	//control.alignUntilDistance(12, 15,40);
     	//Delay.msDelay(1500);;
     	value.incScenario();
