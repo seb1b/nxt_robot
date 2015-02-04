@@ -58,7 +58,7 @@ public class Gate  implements Behavior {
 		
 		System.out.println("S: Calling Gate");
 		
-		controls.alignForTime(12, 14, 4000, 15);
+		controls.alignForTime(12, 14, 3700, 15);
 		pilot.stop();
 		
 		// Wait for connection
@@ -118,12 +118,12 @@ public class Gate  implements Behavior {
 		System.out.println("afteralign");
 		
 		pilot.stop();
-		pilot.rotate(-10);
+		pilot.rotate(-1);
 		
 		//System.out.println("forward 1000");
 		
 		pilot.forward();
-		Delay.msDelay(3000);
+		Delay.msDelay(3000); // 12000
 		
 		
 		System.out.println("incscenario");
