@@ -79,28 +79,7 @@ public class Elevator implements Behavior{
 
 
   	}
-		 
-		 /*
-			while(true){
-				
-				if(!touch_l.isPressed() || !touch_r.isPressed() ){
-					System.out.println("min einer gedrückt");
-				}else{
-					System.out.println("beide gedrückt");
-					
-				}
-			}
-			*/
-    
-    
-    /*
-    public static void main(String[] args){
-    	//Elevator el = new Elevator();
-    	//DifferentialPilot pilot = Values.Instance().getPilot();
-    	//pilot.rotate(180);
-    	LightSensor ls = new LightSensor(SensorPort.S3); //30 als Schwellwert passt
-    	
-    }*/
+
     
 	@Override
 	public void action() {
