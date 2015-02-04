@@ -153,8 +153,8 @@ public class Elevator implements Behavior{
 				pilot.stop();
 				pilot.rotate(-30); 
 				
-					//while(!touch_l.isPressed() || !touch_r.isPressed() ){
-					while(!touch_l.isPressed() && !touch_r.isPressed() ){
+					//while(!touch_l.isPressed() || !touch_r.isPressed() ){ && !touch_r.isPressed() 
+					while(!touch_l.isPressed()){
 						System.out.println("auf gehts");
 						
 
@@ -171,6 +171,12 @@ public class Elevator implements Behavior{
 							System.out.println("Distanz: " + us.getDistance() );
 						continue;
 						} 
+						if(touch_r.isPressed()){
+							pilot.stop();
+							pilot.backward();
+							Delay.msDelay(100);
+							pilot.rotate(10);
+						}
 	}
 			
 					/*im aufzug*/
