@@ -9,7 +9,6 @@ import javax.bluetooth.RemoteDevice;
 
 import utils.Controls;
 import utils.Values;
-import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.TouchSensor;
 import lejos.nxt.UltrasonicSensor;
@@ -17,6 +16,7 @@ import lejos.nxt.comm.BTConnection;
 import lejos.nxt.comm.Bluetooth;
 import lejos.robotics.navigation.DifferentialPilot;
 import lejos.robotics.subsumption.Behavior;
+import lejos.util.Delay;
 
 
 public class TurnTable implements Behavior{
@@ -27,7 +27,7 @@ public class TurnTable implements Behavior{
 	TouchSensor touch_l;
 	TouchSensor touch_r;
 	Controls control;
-	
+	private Values values;
 	
 	private enum TurnTableCommand {
 		HELLO, TURN, DONE, CYA, UNKNOWN;
@@ -41,11 +41,12 @@ public class TurnTable implements Behavior{
 	}
 
 	public TurnTable() {
+		values = Values.Instance();
 		control = Controls.Instance();
 		sonicSensor = new UltrasonicSensor(SensorPort.S2);
 		touch_l = new TouchSensor(SensorPort.S1);
 		touch_r = new TouchSensor(SensorPort.S4);
-		pilot =  Values.Instance().getPilot(); // new  DifferentialPilot(1.3f, 3.94f, Motor.A, Motor.C, false); 
+		pilot =  Values.Instance().getPilot(); 
 
 	}
 
@@ -61,10 +62,15 @@ public class TurnTable implements Behavior{
 	private DataInputStream dataInputStream;
 
 	public void action() {
+		
+		System.out.println("S: TurnTable");
     
+				
 		String deviceName = "TurnTable";
 		RemoteDevice device = lookupDevice(deviceName);
 		BTConnection connection = Bluetooth.connect(device);
+		pilot.setTravelSpeed(25);
+
 		try {
 			dataOutputStream = connection.openDataOutputStream();
 			dataInputStream = connection.openDataInputStream();
@@ -83,8 +89,13 @@ public class TurnTable implements Behavior{
 
 			command = receiveCommand();
 			assertCommand(command, TurnTableCommand.DONE);
-
+			
 			pilot.backward();
+			Delay.msDelay(2000);
+			pilot.stop();
+			
+		
+			pilot.rotate(180);
 			
 			// drive backward
 
@@ -104,6 +115,11 @@ public class TurnTable implements Behavior{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		
+		System.out.println("incscenario");
+
+		values.incScenario();
 	}
 
 	private RemoteDevice lookupDevice(String deviceName) {
