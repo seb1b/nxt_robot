@@ -120,10 +120,17 @@ public class Elevator implements Behavior{
 
 				/*auf der platte, fahre bis wir kein grün mehr sehen*/
 
-				while(!getIsPressed())
+				while(!touch_l.isPressed())
 				{
+					if(touch_r.isPressed()){
+						pilot.stop();
+						pilot.backward();
+						Delay.msDelay(100);
+						pilot.rotate(-10);
+					}
+					
 					if(us.getDistance() < 9){
-						pilot.steer(20);
+						pilot.steer(40);
 						continue;
 				} if(us.getDistance() >= 9){
 						//Fall tritt wsh nie ein
@@ -199,9 +206,10 @@ public class Elevator implements Behavior{
 				pilot.forward();
 				
 				BluetoothTest.closeConnection();
-				
-				suppress();
 				Values.Instance().incScenario();
+				suppressed = true;
+				suppress();
+				
 				
 				
 				
@@ -213,9 +221,9 @@ public class Elevator implements Behavior{
 				@Override
 				public void suppress() {
 					//System.out.println("S: bridge done");
-					Values.Instance().incScenario();
+					
 					pilot.stop();
-			  		suppressed = true;
+			  		
 					
 				}
 			

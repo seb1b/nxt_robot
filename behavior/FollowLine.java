@@ -26,15 +26,14 @@ public class FollowLine implements Behavior {
 	private DifferentialPilot pilot;
 	private LightSensor detector;
 	int start_run = 0;
-	private Values value = Values.Instance();
+	private Values value;
 	TouchSensor touch_l;
 	TouchSensor touch_r;
 	UltrasonicSensor sonicSensor;
 	//Controls control;
 	
 	public FollowLine() {
-		
-		System.out.println("S: construct done");
+		  value = Values.Instance();
 		  pilot = value.getPilot();
 	      pilot.setTravelSpeed(12);
 
@@ -61,17 +60,17 @@ public class FollowLine implements Behavior {
 		
 		//boolean LINE_RIGHT = false;
 		int counter = 1;
-		int value = 0;
 		boolean end_reached = false;
 		int factor = 10;
+		System.out.println("started line follower");
        while (!suppressed) {
     	   if(start_run == 0){
-       		
        		pilot.setTravelSpeed(12);
        		while(dark()){
        			System.out.println("dark0");
        			pilot.forward();
        			System.out.println("dark1");
+       			System.out.println("S: followe  " + value.getScenario());
        		}
        		
        			pilot.stop();
@@ -110,7 +109,8 @@ public class FollowLine implements Behavior {
 						System.out.println("end reached");
 						pilot.rotate((10+(counter-1)*factor)/2);
 						pilot.stop();
-        				//suppress();
+				    	value.incScenario();
+        				suppress();
         			}
        			
         		}    		
@@ -142,6 +142,7 @@ private boolean dark(){
  public void suppress() {
   		System.out.println("suppressed follow line");
   		pilot.setTravelSpeed(30);
+  		System.out.println(" Scenario"+value.getScenario());
   		while(!online()){
   			pilot.forward();
   		}
@@ -152,7 +153,7 @@ private boolean dark(){
   		//System.out.println("looking for distance");
     	//control.alignUntilDistance(12, 15,40);
     	//Delay.msDelay(1500);;
-    	value.incScenario();
+
   		suppressed = true;
   	}
 }

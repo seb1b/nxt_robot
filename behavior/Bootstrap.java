@@ -50,7 +50,7 @@ public class Bootstrap implements Behavior {
 			}
 		}
 		
-	    //System.out.println(" -> S"+scenario);
+
 		Values.Instance().setScenario(scenario);
 		isSet = true;
 	}

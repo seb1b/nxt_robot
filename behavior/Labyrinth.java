@@ -20,7 +20,6 @@ public class Labyrinth implements Behavior {
 	
 	UltrasonicSensor sonicSensor;
 	DifferentialPilot pilot;
-	Controls control;
 	Values value;
 	private static int LOWER_BORDER = 12;
 	private static int UPPER_BORDER = 15;
@@ -29,7 +28,7 @@ public class Labyrinth implements Behavior {
 	private static int SOFT_STEER = 30;
 	TouchSensor touch_l;
 	TouchSensor touch_r;
-	
+	private LightSensor ls;
 	
 	public Labyrinth() {
 		value = Values.Instance();
@@ -37,23 +36,23 @@ public class Labyrinth implements Behavior {
 		touch_l = new TouchSensor(SensorPort.S1);
 		touch_r = new TouchSensor(SensorPort.S4);
 		pilot = value.getPilot();
-		control = Controls.Instance();
-
+		//control = Controls.Instance();
+		ls = new LightSensor(SensorPort.S3);
 	}
 
 	public boolean takeControl() {
 
 		if(Values.Instance().getScenario() == 4){
+			//System.out.println("Construc Labyrinth " +Values.Instance().getScenario());
 			return true;
 		}
 		return false;
 	}
 
 	public void action() {
-		System.out.println("S: Labyrinth");
+		//System.out.println("S: Labyrinth " + Values.Instance().getScenario());
 			
 		boolean contact = false;
-		boolean lineFound = false;
 		int distance = 9999;
 		
 		pilot.setTravelSpeed(20);
@@ -61,8 +60,8 @@ public class Labyrinth implements Behavior {
 		while(!suppressed) {
 			contact = contact();
 			distance = sonicSensor.getDistance();
-			lineFound = control.foundLine();
-			System.out.println(distance);
+
+			//System.out.println(distance);
 			
 			
 			if(contact) {
@@ -75,8 +74,10 @@ public class Labyrinth implements Behavior {
 				continue;
 			}
 				
-			if(lineFound) {
-				Values.Instance().setCallCodeReader(true);
+			if(foundLine()) {
+				System.out.println("line found");
+				//Values.Instance().setCallCodeReader(true);
+				Values.Instance().incScenario();
 				suppressed = true;
 				continue;
 			}
@@ -114,7 +115,17 @@ public class Labyrinth implements Behavior {
 		
 	}
 
+	private boolean foundLine(){
+		boolean on_line = false;
 
+		if(ls.getLightValue() > 58){
+
+			System.out.println("gotlight");
+			on_line = true;
+		}
+			return on_line;
+		
+	}
 	
 
 	public void suppress() {
