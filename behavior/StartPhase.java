@@ -56,7 +56,7 @@ public class StartPhase implements Behavior {
 	}
 
 	public void action() {
-		System.out.println("S: Startphase");
+		System.out.println("S: Startphase" + value.getScenario());
 		
 		boolean contact = false;
 		boolean lineFound = false;
@@ -93,7 +93,8 @@ public class StartPhase implements Behavior {
 				Delay.msDelay(700);
 				
 				pilot.stop();
-				suppressed = true;
+				value.incScenario();
+				//suppressed = true;
 				suppress();
 				//continue;
 			}
@@ -135,9 +136,10 @@ public class StartPhase implements Behavior {
 	
 
 	public void suppress() {
-		value.incScenario();
-		System.out.println("suppress start phase");
+		
 		suppressed = true;
+		System.out.println("suppress start phase");
+		
 	}
 
 	
