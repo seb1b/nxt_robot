@@ -9,6 +9,7 @@ import javax.bluetooth.RemoteDevice;
 
 import utils.Controls;
 import utils.Values;
+import lejos.nxt.LightSensor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.TouchSensor;
 import lejos.nxt.UltrasonicSensor;
@@ -27,6 +28,7 @@ public class TurnTable implements Behavior{
 	TouchSensor touch_l;
 	TouchSensor touch_r;
 	Controls control;
+	LightSensor ls;
 	private Values values;
 	
 	private enum TurnTableCommand {
@@ -46,6 +48,7 @@ public class TurnTable implements Behavior{
 		sonicSensor = new UltrasonicSensor(SensorPort.S2);
 		touch_l = new TouchSensor(SensorPort.S1);
 		touch_r = new TouchSensor(SensorPort.S4);
+		ls = new LightSensor(SensorPort.S3);
 		pilot =  Values.Instance().getPilot(); 
 
 	}
@@ -56,6 +59,7 @@ public class TurnTable implements Behavior{
 			return true;
 		}
 		return false;
+		
 	}
 
 	private DataOutputStream dataOutputStream;
@@ -77,6 +81,159 @@ public class TurnTable implements Behavior{
 
 			TurnTableCommand command = receiveCommand();
 			assertCommand(command, TurnTableCommand.HELLO);
+			
+			//========auf fahrt rampe zu turntable
+			int aligned = 0;
+			pilot.forward();
+			Delay.msDelay(3000);
+			pilot.stop();
+			int counter = 0;
+			boolean end_reached = false;
+
+			int lastTurnDirection=1;
+			int ThisTurnDirection=2;
+			boolean l = false;
+			boolean r = false;
+			
+			float turnSpeed = 50;
+			float max_turnSpeed = pilot.getMaxRotateSpeed()-40;
+			boolean justTurned=false;
+			int not_online_counter = 0;
+			int[] ret_turn = {0,50,150,100};
+			int[] turn = {50,100,50};
+			
+			while(true){
+				
+				
+				/* wir haben uns ausgerichtet */
+				if(aligned >2){
+				System.out.println("looking for wall");
+				pilot.setTravelSpeed(20);
+				
+				/*	fahre in die box	*/
+				while(true){
+					
+					
+					pilot.forward();
+					Delay.msDelay(100);
+					l = touch_l.isPressed();
+					 r = touch_r.isPressed();
+					 /*wenn beide gedrueckt sind, gehe zum naechsten szenario*/
+					 if(r &&l){
+						System.out.println("both pressed");
+						break;
+					}
+					
+					if(r){
+						System.out.println("r");
+						pilot.stop();
+						pilot.backward();
+						Delay.msDelay(150);
+						pilot.rotate(20);
+					}
+					if(l){
+						System.out.println("l");
+						pilot.stop();
+						pilot.backward();
+						Delay.msDelay(150);
+						pilot.rotate(-20);
+					}
+				}
+				
+				/*fahre richtig in die box rein*/
+				pilot.forward();
+				Delay.msDelay(200);
+				System.out.println("inc Secanrio");
+				pilot.stop();
+				//suppress();
+				break;
+				
+			}
+			
+				/*	wir fahren die rampe hoch	*/
+			if(online()){
+					ThisTurnDirection=2;
+					counter = 0;
+					if(justTurned){
+						justTurned=false;
+						Delay.msDelay(10);//kleines delay um wirklich in die linie hinein zu schwenken
+						pilot.stop();
+						aligned++; 		//wir haben uns einmal mehr ausgerichtet
+						
+					}
+					if(aligned >2){
+						continue;		// haben wir uns mehr als 2 mal ausgerichtet gehte sofort weiter
+					}
+
+					pilot.forward();
+					
+					
+					ThisTurnDirection=lastTurnDirection;
+					not_online_counter = 0;
+				}else{
+					justTurned=true;
+					not_online_counter++;
+	    			System.out.println("counter ist bei " + not_online_counter);
+	    			System.out.println("aligned ist bei " + aligned);
+	    			
+	    			/* checke ob wir wirklich von der linie runter sind*/
+	    			if(not_online_counter >5){
+	    				pilot.stop();
+	    				
+	    				//haben wir uns oft genug ausgerichtet
+				if(counter >2){
+						end_reached = true;
+						aligned=3;
+						continue;	//gehe ueber zu tast erkennung
+						}
+					
+
+
+			if(ThisTurnDirection==2){
+
+				lastTurnDirection=2;
+				ThisTurnDirection=1;
+				pilot.setRotateSpeed(max_turnSpeed);
+				pilot.rotate(ret_turn[counter],false);
+				pilot.setRotateSpeed(turnSpeed);
+				//	only move forward if value is high enough
+				pilot.rotate(turn[counter],true); //left  
+				while(pilot.isMoving()){
+					if(online()){
+
+
+						break;
+
+					}
+				}
+
+
+			}else{       			
+				lastTurnDirection=1;
+				ThisTurnDirection=2;
+				pilot.setRotateSpeed(max_turnSpeed);
+				pilot.rotate(-ret_turn[counter],false);
+				pilot.setRotateSpeed(turnSpeed);
+				pilot.rotate(-turn[counter],true);//right
+				while(pilot.isMoving()){
+					if(online()){					
+						break;       								
+					}
+				}
+			}        					
+			counter++;
+			}
+	    			
+			}
+			
+			
+			}
+		
+			
+		
+			
+			//=====================
+			
 
 			pilot.forward();
 			while(!touch_l.isPressed() || !touch_r.isPressed())
@@ -164,5 +321,11 @@ public class TurnTable implements Behavior{
 		// TODO Auto-generated method stub
 		
 	}
+	
+	boolean online(){
+		return ls.getLightValue()>52;
+
+	}
+
 
 }

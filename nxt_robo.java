@@ -7,6 +7,8 @@ import behavior.FollowLine2ndPart;
 import behavior.Gate;
 import behavior.Labyrinth;
 import behavior.PlankBridge;
+import behavior.Quali_FollowLine;
+import behavior.Quali_Labyrinth;
 import behavior.StartPhase;
 import behavior.ReadBarcode;
 import behavior.TurnTable;
@@ -43,6 +45,10 @@ public class nxt_robo {
       
       
       Behavior b10 = new Bootstrap();
+      
+      //for QUALI ONLY
+      Behavior b11 = new Quali_FollowLine();
+      Behavior b12 = new Quali_Labyrinth();
 
       
      /* Behavior b3 = new FollowLine();
@@ -52,7 +58,7 @@ public class nxt_robo {
       Behavior b12  = new SpinningEncounter();*/
 
       //Behavior [] bArray = {b1};
-      Behavior [] bArray = {b0, b1, b2, b3, b4,b5, b6,b7,b8,b9,b10};
+      Behavior [] bArray = {b0, b1, b2, b3, b4,b5, b6,b7,b8,b9,b10,b11,b12};
 
 
       Arbitrator arby = new Arbitrator(bArray);
