@@ -76,13 +76,7 @@ public class Quali_Labyrinth implements Behavior {
 				continue;
 			}
 				
-			if(foundLine()) {
-				System.out.println("line found");
-				//Values.Instance().setCallCodeReader(true);
-				Values.Instance().incScenario();
-				suppressed = true;
-				continue;
-			}
+			
 			
 			// Good distance
 			if(LOWER_BORDER < distance && UPPER_BORDER > distance) {

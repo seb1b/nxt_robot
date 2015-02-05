@@ -158,8 +158,9 @@ public class Quali_FollowLine implements Behavior {
         				}
 						//System.out.println("end reached");
 						//while()
+        				pilot.setTravelSpeed(pilot.getRotateMaxSpeed());
         				pilot.forward();
-        				Delay.msDelay(500);
+        				Delay.msDelay(1000);
 						pilot.stop();
 				    	value.incScenario();
 				 		suppressed = true;

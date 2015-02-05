@@ -248,12 +248,14 @@ public class TurnTable implements Behavior{
 			assertCommand(command, TurnTableCommand.DONE);
 			
 			pilot.backward();
-			Delay.msDelay(1800);
-			pilot.stop();
+			Delay.msDelay(1750);
+		
 			
 		
-			pilot.rotate(180);
-			
+			pilot.rotate(160);
+			pilot.forward();
+			Delay.msDelay(300);
+			pilot.stop();
 			// drive backward
 
 			sendCommand(TurnTableCommand.CYA);

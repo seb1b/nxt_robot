@@ -63,6 +63,7 @@ public class Endboss implements Behavior{
 	public void action() {
 		System.out.println("S: Endboss");
 		int ultraSonic;
+		pilot.setTravelSpeed(pilot.getMaxTravelSpeed());
 		//Motor.B.rotate(-90);
 		while(!touch_r.isPressed()){
 			ultraSonic = ultraSonicOn();

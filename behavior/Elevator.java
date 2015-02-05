@@ -107,7 +107,7 @@ public class Elevator implements Behavior{
 						pilot.stop();
 						pilot.backward();
 						Delay.msDelay(100);
-						pilot.rotate(-10);
+						pilot.rotate(10);
 					}
 					
 					if(us.getDistance() < 9){
