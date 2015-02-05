@@ -112,34 +112,6 @@ public class Gate  implements Behavior {
 
 		System.out.println("Received: " + success);
 		
-		
-		//System.out.println("beforealign");
-		//controls.alignUntilDistance(12, 14, 90, 12);
-		controls.alignForTime(12, 14, 5000, 15);
-		//System.out.println("afteralign");
-		
-		
-		pilot.stop();
-		pilot.rotate(1);
-		pilot.setTravelSpeed(18);
-		
-		long starttime = System.currentTimeMillis();
-		int stoppedtime = 0;
-		
-		while((System.currentTimeMillis() - stoppedtime - starttime) < 13000) {
-			
-			if(getIsPressed()){
-				pilot.stop();
-				stoppedtime +=1000;
-				System.out.println("+500");
-				Delay.msDelay(700);
-			}
-			
-			System.out.println("TimeLeft: "+(13000 - (System.currentTimeMillis() - stoppedtime - starttime)));
-			
-			pilot.forward();
-		}
-		
 		pilot.stop();
 		System.out.println("Inc");
 		values.incScenario();
