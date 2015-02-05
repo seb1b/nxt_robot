@@ -35,10 +35,7 @@ public class Endboss implements Behavior{
 			
 	}
 	
-	public static void main(String[] args){
-		Endboss eb = new Endboss();
-			eb.testaction();
-	}
+
 
 	@Override
 	public boolean takeControl() {
@@ -48,27 +45,7 @@ public class Endboss implements Behavior{
 		return false;
 	}
 	
-	public void testaction(){
-		System.out.println("S: Endboss");
-		while(true){
-			int ultraSonic;
-			//Motor.B.rotate(-90);
-			while(!touch_r.isPressed()){
-				ultraSonic = ultraSonicOn();
-				
-				pilot.steer(-20);
-				
-			} if(!(touch_r.isPressed() && touch_l.isPressed())){
-				pilot.steer(80);
-				Delay.msDelay(500);
-				ultraSonic = ultraSonicOn();
-			}
-			
-			if(touch_r.isPressed() && touch_l.isPressed()){
-				pilot.rotate(90);
-			}
-		}
-	}
+
 	
 	public int ultraSonicOn(){
 		int distance;
