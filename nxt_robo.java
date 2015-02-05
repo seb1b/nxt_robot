@@ -10,6 +10,7 @@ import behavior.PlankBridge;
 import behavior.StartPhase;
 import behavior.ReadBarcode;
 import behavior.TurnTable;
+import behavior.Endboss;
 import lejos.robotics.subsumption.Arbitrator;
 import lejos.robotics.subsumption.Behavior;
 
@@ -34,13 +35,14 @@ public class nxt_robo {
       Behavior b2 = new Bridge();
   	  Elevator b3 = new Elevator();
       Behavior b4 = new Labyrinth();
-     // Behavior b5 = new ReadBarcode();
-      Behavior b6 = new Gate();
+      Behavior b5 = new Gate();
+      Behavior b6 = new PlankBridge();
       Behavior b7 = new FollowLine2ndPart();
       Behavior b8 = new TurnTable();
+      Behavior b9 = new Endboss();
       
       
-      Behavior b9 = new Bootstrap();
+      Behavior b10 = new Bootstrap();
 
       
      /* Behavior b3 = new FollowLine();
@@ -50,7 +52,7 @@ public class nxt_robo {
       Behavior b12  = new SpinningEncounter();*/
 
       //Behavior [] bArray = {b1};
-      Behavior [] bArray = {b0, b1, b2, b3, b4, b6,b7,b8,b9};
+      Behavior [] bArray = {b0, b1, b2, b3, b4,b5, b6,b7,b8,b9,b10};
 
 
       Arbitrator arby = new Arbitrator(bArray);

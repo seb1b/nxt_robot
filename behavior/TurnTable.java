@@ -52,7 +52,7 @@ public class TurnTable implements Behavior{
 
 	public boolean takeControl() {
 
-		if(Values.Instance().getScenario() == 7){
+		if(Values.Instance().getScenario() == 8){
 			return true;
 		}
 		return false;

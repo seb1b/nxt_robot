@@ -61,10 +61,10 @@ public class FollowLine2ndPart implements Behavior {
 	public boolean takeControl() {
 
 
-		if(value.getScenario() == 6) {
+		if(value.getScenario() == 7) {
 			suppressed =false;
 			return true;
-		}else if(value.getScenario() == 8){
+		}else if(value.getScenario() == 9){
 			final_part = true;
 			suppressed =false;
 			return true;
@@ -95,7 +95,7 @@ public class FollowLine2ndPart implements Behavior {
 		int[] second_ret_turn = {0,50,50};
 		int[] second_turn = {50,50};
 		float turnSpeed = 50;
-		float max_turnSpeed = pilot.getMaxRotateSpeed()-10;
+		float max_turnSpeed = pilot.getMaxRotateSpeed()-40;
 		int aligned =0;
 		boolean r;
 		boolean l;
