@@ -62,7 +62,7 @@ public class StartPhase implements Behavior {
 		boolean lineFound = false;
 		int distance = 9999;
 		
-		pilot.setTravelSpeed(30);
+		pilot.setTravelSpeed(25);
 		
 	
 		if(!value.isStartphaseRunning()){

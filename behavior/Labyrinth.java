@@ -50,12 +50,12 @@ public class Labyrinth implements Behavior {
 	}
 
 	public void action() {
-		//System.out.println("S: Labyrinth " + Values.Instance().getScenario());
+		System.out.println("S: Labyrinth " + Values.Instance().getScenario());
 			
 		boolean contact = false;
 		int distance = 9999;
 		
-		pilot.setTravelSpeed(30);
+		pilot.setTravelSpeed(25);
 		
 		while(!suppressed) {
 			contact = contact();

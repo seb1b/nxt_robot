@@ -72,12 +72,16 @@ public class Bridge implements Behavior {
 			}
 			
 				if(distance < treshold){
-					pilot.steer(60);
+
+					pilot.steer(50);
 					continue;
 			} if(distance >= treshold){
 					//Fall tritt wsh nie ein
 					pilot.stop();
-					pilot.rotate(-35);
+					pilot.backward();
+					Delay.msDelay(100);
+					pilot.rotate(-45);
+
 			continue;
 			} 
 			
@@ -90,6 +94,8 @@ public class Bridge implements Behavior {
 //				moveRight();
 //			}
 		}
+		Values.Instance().incScenario();
+  		suppressed = true;
 		suppress();
 	}
 	
@@ -111,9 +117,9 @@ public class Bridge implements Behavior {
 
 	public void suppress() {
 		System.out.println("S: bridge done");
-		Values.Instance().incScenario();
+
 		pilot.stop();
-  		suppressed = true;
+
 
 	}
 

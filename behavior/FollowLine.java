@@ -30,6 +30,8 @@ public class FollowLine implements Behavior {
 	TouchSensor touch_l;
 	TouchSensor touch_r;
 	UltrasonicSensor sonicSensor;
+	int initialTurn = 60;
+	int turnSpeed = 60;
 	//Controls control;
 	private int lastTurnDirection=1;
 	private boolean justTurned=false;
@@ -38,7 +40,7 @@ public class FollowLine implements Behavior {
 		  value = Values.Instance();
 		  pilot = value.getPilot();
 	      pilot.setTravelSpeed(20);
-	      pilot.setRotateSpeed(70);
+	      pilot.setRotateSpeed(turnSpeed);
 	      
 	      touch_l = new TouchSensor(SensorPort.S1);
 			touch_r = new TouchSensor(SensorPort.S4);
@@ -65,20 +67,22 @@ public class FollowLine implements Behavior {
 		boolean ON_LINE = true;
 		
 		//boolean LINE_RIGHT = false;
-		int counter = 1;
+		int counter = 0;
 		boolean end_reached = false;
-		int factor = 30;
+		//int factor = 40;
 		int not_online_counter = 0;
 		int ThisTurnDirection=1;
 		//System.out.println("started line follower");
+		//int[] ret_turn = {0,40,100,170,110};
+		//int[] turn = {40,60,70,50};
+		int[] ret_turn = {0,50,150,100};
+		int[] turn = {50,100,50};
        while (!suppressed) {
     	   if(start_run == 0){
-       		pilot.setTravelSpeed(20);
+       		pilot.setTravelSpeed(22);
        		while(dark()){
-       			//System.out.println("dark0");
        			pilot.forward();
-       			//System.out.println("dark1");
-       			//System.out.println("S: followe  " + value.getScenario());
+
        		}
        		
        			pilot.stop();
@@ -94,7 +98,7 @@ public class FollowLine implements Behavior {
         		if(online()){
         			if(justTurned){
         				justTurned=false;
-        				Delay.msDelay(10);//kleines delay um wirklich in die linie hinein zu schwenken
+        				//Delay.msDelay(10);//kleines delay um wirklich in die linie hinein zu schwenken
         				pilot.stop();
         				
         			}
@@ -105,7 +109,9 @@ public class FollowLine implements Behavior {
         		}else{
         			not_online_counter++;
         			System.out.println("counter ist bei " + not_online_counter);
-        			if(not_online_counter >5)
+        			if(not_online_counter >5){
+        				pilot.stop();
+        			
         			/*if(!online()){		//zweiter check um wirklich von der linie weg zu sein
         			pilot.stop();
         			System.out.println("wirklich gestopped");
@@ -115,21 +121,20 @@ public class FollowLine implements Behavior {
         			while(!online()){ 
         				justTurned=true;
         				//if(!pilot.isMoving()){        					
-        					if(counter >5){
+        					if(counter >2){
         						end_reached = true;
         						break;
         					}
-        					//if(counter > 3){
-        					//	factor = 30;
-        					//}
         					
         					if(ThisTurnDirection==2){
      
         						lastTurnDirection=2;
         						ThisTurnDirection=1;
-        						if(counter>3)
-        							pilot.travel(1);	//	only move forward if value is high enough
-        						pilot.rotate(60+(counter-1)*factor,true); //left  
+        						pilot.setRotateSpeed(pilot.getRotateMaxSpeed());
+        						pilot.rotate(ret_turn[counter],false);
+        						pilot.setRotateSpeed(turnSpeed);
+        						//	only move forward if value is high enough
+        						pilot.rotate(turn[counter],true); //left  
         						while(pilot.isMoving()){
         							if(online()){
         								
@@ -143,7 +148,10 @@ public class FollowLine implements Behavior {
         					}else{       			
         						lastTurnDirection=1;
         						ThisTurnDirection=2;
-        						pilot.rotate(-60-(counter-1)*factor,true);//right
+        						pilot.setRotateSpeed(pilot.getRotateMaxSpeed());
+        						pilot.rotate(-ret_turn[counter],false);
+        						pilot.setRotateSpeed(turnSpeed);
+        						pilot.rotate(-turn[counter],true);//right
         						while(pilot.isMoving()){
         							if(online()){					
         								break;       								
@@ -156,19 +164,21 @@ public class FollowLine implements Behavior {
         			}
         			
         			if(end_reached){
+        				pilot.setRotateSpeed(pilot.getRotateMaxSpeed());
         				if(lastTurnDirection ==1){
-        					pilot.rotate((60+(counter-1)*factor)/2 - 10);
+        					pilot.rotate(ret_turn[counter]);
         				}else{
-        					pilot.rotate((-60-(counter-1)*factor)/2 + 10);
+        					pilot.rotate(-ret_turn[counter]);
         					
         				}
 						//System.out.println("end reached");
 						
 						pilot.stop();
 				    	value.incScenario();
+				 		suppressed = true;
         				suppress();
         			}
-       			
+        			}
         		}    		
         	}   		
 }
@@ -177,7 +187,7 @@ public class FollowLine implements Behavior {
 
 
 boolean online(){
-	return detector.getLightValue()>60;
+	return detector.getLightValue()>55;
 	
 }
 
@@ -216,7 +226,7 @@ public boolean getIsPressed(){
     	//control.alignUntilDistance(12, 15,40);
     	//Delay.msDelay(1500);;
 
-  		suppressed = true;
+ 
   	}
 }
 

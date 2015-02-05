@@ -32,7 +32,7 @@ public class BluetoothTest {
 	 * @param args
 	 *            you know what this is for (at least i hope so)
 	 */
-	public static void main(String args[]) {
+	/*public static void main(String args[]) {
 		
 		
 		while (!openConnection(LIFT)) {
@@ -54,7 +54,7 @@ public class BluetoothTest {
 		System.out.println("Test");
 		
 		closeConnection();
-	}
+	}*/
 
 	/**
 	 * opens a connection to a server

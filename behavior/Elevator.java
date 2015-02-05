@@ -101,7 +101,9 @@ public class Elevator implements Behavior{
 
 				while(!touch_l.isPressed())
 				{
+					
 					if(touch_r.isPressed()){
+						//System.out.println("")
 						pilot.stop();
 						pilot.backward();
 						Delay.msDelay(100);
@@ -109,19 +111,21 @@ public class Elevator implements Behavior{
 					}
 					
 					if(us.getDistance() < 9){
+						//System.out.println("steer");
 						pilot.steer(40);
-						continue;
-				} if(us.getDistance() >= 9){
+						//continue;
+				} else{
+					//System.out.println("stop");
 						//Fall tritt wsh nie ein
 						pilot.stop();
 						pilot.rotate(-10);
-				continue;
+						//continue;
 				} 
 						
 				}
 				
 				/* *********************im eingangsbereich*********************************** */
-
+				System.out.println("eingangsbereich");
 				pilot.stop();
 				Delay.msDelay(1000);
 				Motor.B.rotate(100); 		//rotiere sensor wieder seitlich
@@ -130,7 +134,7 @@ public class Elevator implements Behavior{
 				Delay.msDelay(300);
 				pilot.stop();
 				pilot.rotate(-40); 
-				
+				System.out.println("ausgerichtet");
 					//while(!touch_l.isPressed() || !touch_r.isPressed() ){ && !touch_r.isPressed() 
 					while(!touch_l.isPressed()){
 						System.out.println("auf gehts");
@@ -155,7 +159,7 @@ public class Elevator implements Behavior{
 						continue;
 						} 
 						
-	}
+					}
 			
 					/*im aufzug*/
 					
@@ -197,14 +201,14 @@ public class Elevator implements Behavior{
 
 
 
-				@Override
-				public void suppress() {
+@Override
+public void suppress() {
 					//System.out.println("S: bridge done");
 					
 					pilot.stop();
 			  		
 					
-				}
+}
 			
 
 	
