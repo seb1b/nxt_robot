@@ -41,7 +41,7 @@ public class PlankBridge implements Behavior {
 		
 		//System.out.println("beforealign");
 		//controls.alignUntilDistance(12, 14, 90, 12);
-		controls.alignForTime(12, 14, 5200, 15);
+		controls.alignForTime(12, 14, 4800, 15);
 		//System.out.println("afteralign");
 		
 		

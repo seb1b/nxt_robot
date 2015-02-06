@@ -68,7 +68,7 @@ public class Endboss implements Behavior{
 		while(!touch_r.isPressed()){
 			ultraSonic = ultraSonicOn();
 			
-			pilot.steer(-20);
+			pilot.steer(-60);
 			
 		} if(!(touch_r.isPressed() && touch_l.isPressed())){
 			pilot.steer(80);

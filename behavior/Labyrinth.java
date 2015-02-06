@@ -23,7 +23,7 @@ public class Labyrinth implements Behavior {
 	Values value;
 	private static int LOWER_BORDER = 12;
 	private static int UPPER_BORDER = 15;
-	private static int NO_WALL = 40;
+	private static int NO_WALL = 45;
 	private static int HARD_STEER = 70;
 	private static int SOFT_STEER = 30;
 	TouchSensor touch_l;
